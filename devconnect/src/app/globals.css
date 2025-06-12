@@ -19,3 +19,112 @@
   }
 }
 
+.authbaselayout{
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+border: 1px solid black;
+height: 100vh;
+}
+
+.basediv{
+    border: 1px solid black;
+    background-color: whitesmoke;
+  border:1px solid grey;
+padding:12.5px;
+  width: 375px;
+  color: black;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+ border-radius: 20px;
+}
+
+.signindiv {
+    height:460px;
+}
+
+.signupdiv{
+  height:430px;
+}
+.forgetpassworddiv{
+  height: 330px;
+}
+
+.extrabutton{
+  padding: 2px 6px;
+  display: flex;
+  gap: 4px;
+  width: 150px;
+  justify-content: space-evenly;
+  border-radius: 8px;
+}
+.extrabutton:hover{
+  transform: scale(1.005);
+}
+.extrabutton:active{
+  transform: scale(0.99);
+}
+
+.forminput{
+  width: 300px;
+  height: 40px;
+  background-color: white;
+    border: 1px solid grey;
+    padding: 4px;
+    font-size: 1rem;
+    border-radius: 10px;
+    color: black;
+    outline: none;
+  }
+
+.forminput:focus{
+box-shadow: 0 2px 5px rgba(0, 123, 255, 0.5);
+}
+.forminput:focus::placeholder{
+opacity: 0;
+}
+.BacktoHomediv{
+  align-self: center;
+}
+
+.formbutton, .BacktoHomediv button{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 300px;
+  height: 40px;
+  color: white;
+font-weight: 500;
+  background-color: #3a3a3a;
+  text-align: center;
+    border: 2px solid black;
+        border-radius: 10px;
+}
+
+
+
+
+.formbutton:hover,.BacktoHomediv button:hover{
+  background-color: #2e2e2e;
+  transform: scale(1.01);
+}
+.formbutton:active,.BacktoHomediv button:active{
+  background-color: #2e2e2e;
+  transform: scale(0.99);
+}
+
+.formlink{
+  margin-left: 26px;
+  align-self: flex-start;
+ color:blue; 
+}
+
+.formlink:hover{
+  color: rgb(87, 71, 227);
+ transform: scale(1.01);
+}
+.formlink:active{
+  color: rgb(87, 71, 227);
+ transform: scale(0.99);
+}
