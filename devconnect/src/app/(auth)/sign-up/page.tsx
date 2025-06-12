@@ -12,6 +12,8 @@ import Link from "next/link";
 
 
 export default function Signup(){
+
+    
  return <div className="signupdiv basediv">
        <div className="flex flex-col mt-4 gap-1 items-center w-[350px]">
            <h1 className="font-bold text-xl">Sign up to devConnect</h1>
