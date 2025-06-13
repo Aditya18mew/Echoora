@@ -1,12 +1,15 @@
 import mongoose from "mongoose";
 
 
-const UserSchema=new mongoose.Schema({
-Authdetails:{
-Email:String,
-Password:String
-}
-})
+        const UserSchema=new mongoose.Schema({
+        Authdetails:{
+        Email:String,
+        Password:String,
+        RefreshToken:String,
+        RefreshtokencreateDate:Date,
+        RefreshtokenexpiryDate:Date
+        }
+        })
 
 
  export const User=mongoose.models.User || mongoose.model("User",UserSchema)
@@ -23,7 +26,7 @@ try{
 
 export async function FindOne(Email:string){
     try{
-        const Currentuser=await User.findOne({Email:Email})
+        const Currentuser=await User.findOne({"Authdetails.Email":Email})
         return Currentuser
     }catch(err){
         console.log(err)

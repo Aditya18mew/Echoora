@@ -1,6 +1,8 @@
 "use client"
 import { useState } from "react"
 import { Signupaction } from "./Serveraction"
+import { validatemail,validatepassword } from "./regex"
+
 
 type Errors={
   Email:{

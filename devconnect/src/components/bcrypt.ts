@@ -1,5 +1,8 @@
 import { FindOne, User } from "@/db"
 import bcrypt from "bcrypt"
+import { generatejwtToken } from "./jwttokens"
+
+
 
 
 type formData={
@@ -10,14 +13,15 @@ type formData={
 export async function bcryptData(formData:formData){
        try{
        const hashPassword=await bcrypt.hash(formData.Password,10)
-       const newUser=new User({
+        const newUser=new User({
         Authdetails:{
             Email:formData.Email,
-            Password:hashPassword
+            Password:hashPassword,
         }
        })
         await newUser.save()
-
+     const {AccessToken,RefreshToken}= await generatejwtToken(formData.Email)
+        return {AccessToken,RefreshToken}
        }catch(err){
         console.log(err)
        }

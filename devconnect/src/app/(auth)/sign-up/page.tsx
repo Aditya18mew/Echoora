@@ -2,6 +2,7 @@ import { SignupForm } from "@/components/signupform";
 import "../../globals.css"
 import Link from "next/link";
 import { GithubButton,GoogleButton } from "@/components/Buttons";
+import { connectdb } from "@/db";
 
 
 
@@ -9,7 +10,7 @@ import { GithubButton,GoogleButton } from "@/components/Buttons";
 
 
 
-export default function Signup(){
+export default async function Signup(){
 
     
  return <div className="signupdiv basediv">
