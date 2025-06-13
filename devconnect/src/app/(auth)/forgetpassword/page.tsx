@@ -1,4 +1,6 @@
-import { BacktoHomebutton, ForgetpasswordForm } from "@/components/forgetpasswordform"
+import { BacktoHomebutton } from "@/components/Buttons"
+import {ForgetpasswordForm } from "@/components/forgetpasswordform"
+
 
 
 

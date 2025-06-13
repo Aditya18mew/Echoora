@@ -75,9 +75,14 @@ padding:12.5px;
     padding: 4px;
     font-size: 1rem;
     border-radius: 10px;
-    color: black;
     outline: none;
   }
+.forminput-noerror{
+    color: black;
+}
+.forminput-error{
+  color: rgb(255, 0, 0);
+}
 
 .forminput:focus{
 box-shadow: 0 2px 5px rgba(0, 123, 255, 0.5);
