@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { Logoutaction, Signupaction } from "./Serveraction"
 import { validatemail,validatepassword } from "./regex"
+import { useRouter } from "next/navigation"
 
 
 type Errors={
@@ -17,6 +18,7 @@ type Errors={
 
 
 export function SignupForm(){
+  const router=useRouter()
 
 const [formData,setformData]=useState({
   Email:"",
@@ -63,6 +65,9 @@ async function handlesubmit(e){
 
 try{
   const res= await Signupaction(formData)
+  if(res.success){
+   router.push(`/sign-up/verifyemail?email=${encodeURIComponent(formData.Email)}`)
+  }
 }catch(err){
   console.log(err)
 }

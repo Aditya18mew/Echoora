@@ -1,6 +1,10 @@
 import { FindOne, User } from "@/db"
 import bcrypt from "bcrypt"
 import { generatejwtToken } from "./jwttokens"
+import { Mailotp } from "./nodemailer"
+import { randomInt } from "crypto"
+
+
 
 
 
@@ -10,18 +14,28 @@ type formData={
     Password:string
 }
 
+type MailtopResponse={
+    success:boolean,
+    response:string,
+} | undefined
+
 export async function bcryptData(formData:formData){
        try{
        const hashPassword=await bcrypt.hash(formData.Password,10)
+       const otp=randomInt(100000,999999).toString()
+
         const newUser=new User({
         Authdetails:{
             Email:formData.Email,
             Password:hashPassword,
+            Otp:otp
         }
        })
         await newUser.save()
-     const {AccessToken,RefreshToken}= await generatejwtToken(formData.Email)
-           return {AccessToken:AccessToken,RefreshToken:RefreshToken}
+        const res:MailtopResponse= await Mailotp(formData.Email,otp)
+         if(typeof res !=="undefined"){
+            return   {success:res.success}
+         }
        }catch(err){
         console.log(err)
        }

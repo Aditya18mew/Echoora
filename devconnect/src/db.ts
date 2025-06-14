@@ -5,6 +5,7 @@ import mongoose from "mongoose";
         Authdetails:{
         Email:String,
         Password:String,
+        Otp:String,
         RefreshToken:String,
         RefreshtokencreateDate:Date,
         RefreshtokenexpiryDate:Date
