@@ -25,7 +25,15 @@ export async function Signinaction(formData:formData){
 }
 export async function ForgetPasswordaction(Email:string){
     try{
-    const response=await axios.post("http://localhost:3000/api/sign-in",{Email:Email})
+    const response=await axios.post("http://localhost:3000/api/forgetpassword",{Email:Email})
+    return response.data
+    }catch(err){
+   console.log(err)
+    }
+}
+export async function Logoutaction(Email:string){
+    try{
+    const response=await axios.post("http://localhost:3000/api/logout",{Email:Email})
     return response.data
     }catch(err){
    console.log(err)

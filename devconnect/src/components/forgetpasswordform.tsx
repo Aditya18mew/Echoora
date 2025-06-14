@@ -1,7 +1,8 @@
 "use client"
 
-import { redirect } from "next/navigation"
 import { useState } from "react"
+import { validatemail } from "./regex"
+import { ForgetPasswordaction } from "./Serveraction"
 
 type Error={
   isError:boolean,
@@ -24,14 +25,20 @@ export function ForgetpasswordForm(){
   }
   async function handlesubmit(e){
      e.preventDefault()
-     const newerror:Error={
-          isError:email.trim()==="",
-          Errmessage:"Email is required"
-     }
-     seterror(newerror)
-     if(error.isError) return
-     try{
 
+     const newerror:Error={
+          isError:email.trim()==="" || !(validatemail(email)),
+          Errmessage:!validatemail(email) ? "invalid Email": "Email is required"
+     }
+
+     seterror(newerror)
+     if(error.isError){
+      setemail("")
+      return;
+     }
+
+     try{
+    const res=await ForgetPasswordaction(email)
      }catch(err){
       console.log(err)
      }

@@ -2,6 +2,8 @@
 import Link from "next/link"
 import { useState } from "react"
 import { Signinaction } from "./Serveraction"
+import { validatemail,validatepassword } from "./regex"
+
 
 type Errors={
   Email:{
@@ -46,17 +48,21 @@ export function SigninForm(){
   
   async function handlesubmit(e){
       e.preventDefault()
-      const newerror:Errors={
-        Email:{
-          isError:formData.Email.trim()==="",
-          Errmessage:"Email is required"
-        },
-        Password:{
-          isError:formData.Password.trim()==="",
-          Errmessage:"Password is required"
-        }}
+       const newerror:Errors={
+            Email:{
+              isError:formData.Email.trim()==="" || !(validatemail(formData.Email)),
+              Errmessage:!validatemail(formData.Email) ? "invalid Email" : "Email is required"
+            },
+            Password:{
+              isError:formData.Password.trim()==="" || !(validatepassword(formData.Password)),
+              Errmessage:!validatepassword(formData.Password) ? "" : "Password is required"
+            }}
         seterrors(newerror)
-       if(newerror.Email.isError || newerror.Password.isError) return
+       if(newerror.Email.isError || newerror.Password.isError){
+      if(newerror.Email.isError)  setformData(prev=>({...prev,Email:""}))
+      if(newerror.Password.isError)  setformData(prev=>({...prev,Password:""}))
+      return;
+    }
   try{
    const res=await Signinaction(formData)
     console.log(res)

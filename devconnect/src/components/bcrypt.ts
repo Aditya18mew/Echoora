@@ -21,7 +21,7 @@ export async function bcryptData(formData:formData){
        })
         await newUser.save()
      const {AccessToken,RefreshToken}= await generatejwtToken(formData.Email)
-        return {AccessToken,RefreshToken}
+           return {AccessToken:AccessToken,RefreshToken:RefreshToken}
        }catch(err){
         console.log(err)
        }
@@ -31,9 +31,16 @@ export async function bcryptData(formData:formData){
 export async function ComparePassword(formData:formData){
     try{
     const Currentuser=await FindOne(formData.Email)
+    if(!Currentuser) return {type:"EmailError",Email:{isError:true,Errmessage:"no account with this email"}}
     const passwordMatch:boolean=await bcrypt.compare(formData.Password,Currentuser.Authdetails.Password)
-    return passwordMatch
+    if(passwordMatch){
+    const {AccessToken,RefreshToken}= await generatejwtToken(formData.Email)
+      return {type:"Tokens",AccessToken:AccessToken,RefreshToken:RefreshToken}
+    }else{
+        return {type:"PasswordError",Password:{isError:true,Errmessage:"incorrect password"}}
+    }
     }catch(err){
         console.log(err)
     }
 }
+

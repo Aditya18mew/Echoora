@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { Signupaction } from "./Serveraction"
+import { Logoutaction, Signupaction } from "./Serveraction"
 import { validatemail,validatepassword } from "./regex"
 
 
@@ -43,20 +43,26 @@ const [formData,setformData]=useState({
 
 async function handlesubmit(e){
     e.preventDefault()
+
     const newerror:Errors={
       Email:{
-        isError:formData.Email.trim()==="",
-        Errmessage:"Email is required"
+        isError:formData.Email.trim()==="" || !(validatemail(formData.Email)),
+        Errmessage:!validatemail(formData.Email) ? "invalid Email" : "Email is required"
       },
       Password:{
-        isError:formData.Password.trim()==="",
-        Errmessage:"Password is required"
+        isError:formData.Password.trim()==="" || !(validatepassword(formData.Password)),
+        Errmessage:!validatepassword(formData.Password) ? "8 characters with 1 alphabet and 1 digit" : "Password is required"
       }}
+
       seterrors(newerror)
-     if(newerror.Email.isError || newerror.Password.isError) return;
+    if(newerror.Email.isError || newerror.Password.isError){
+      if(newerror.Email.isError)  setformData(prev=>({...prev,Email:""}))
+      if(newerror.Password.isError)  setformData(prev=>({...prev,Password:""}))
+      return;
+    }
+
 try{
   const res= await Signupaction(formData)
-  console.log(res)
 }catch(err){
   console.log(err)
 }
