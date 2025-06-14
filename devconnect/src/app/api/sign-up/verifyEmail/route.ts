@@ -8,11 +8,11 @@ import { NextResponse } from "next/server"
 
 export async function POST(req:Request){
   await connectdb()
-  const {email,Otp}=await req.json()
+  const {Email,otp}=await req.json()
 try {
-      const Toverifyuser=await FindOne(email)
-    if(Toverifyuser.Authdetails.Otp===Otp){
-  const {AccessToken,RefreshToken}= await generatejwtToken(email)
+      const Toverifyuser=await FindOne(Email)
+    if(Toverifyuser.Authdetails.Otp===otp){
+  const {AccessToken,RefreshToken}= await generatejwtToken(Email)
     return NextResponse.json({success:true,data:{AccessToken:AccessToken,RefreshToken:RefreshToken}})
     }else{
         return NextResponse.json({success:false,Error:{isError:true,Errmessage:"Incorrect Otp"}})
@@ -20,6 +20,4 @@ try {
    }catch(err){
     console.log(err)
    }
-
-
 }

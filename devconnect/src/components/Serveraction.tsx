@@ -40,3 +40,12 @@ export async function Logoutaction(Email:string){
     }
 }
 
+export async function VerifyEmail(Email:string | undefined,otp:string){
+     try{
+    const response=await axios.post("http://localhost:3000/api/sign-up/verifyemail",{Email:Email,otp:otp})
+    return response.data
+    }catch(err){
+   console.log(err)
+    }
+}
+
