@@ -58,3 +58,21 @@ export async function ComparePassword(formData:formData){
     }
 }
 
+export async function bcryptResetpassword(Email:string,Password:string){
+       try{
+         const Currentuser=await FindOne(Email)
+         if(!Currentuser) return {success:false}
+     const hashPassword=await bcrypt.hash(Password,10)
+   Currentuser.Authdetails.Password=hashPassword
+    await Currentuser.save()
+    return {success:true}
+   
+      }catch(err){
+   console.log(err)
+   return {success:false}
+      }
+}
+
+
+
+

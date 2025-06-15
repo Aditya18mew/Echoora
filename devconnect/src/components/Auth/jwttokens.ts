@@ -39,7 +39,7 @@ export async function generatejwtToken(email:string){
 
 export async function removejwtToken(email:string){
   const Currentuser=await FindOne(email)
- if(!Currentuser) return {success:true,message:"unable to logout try again"}
+ if(!Currentuser) return {success:false,message:"unable to logout try again"}
  try{
     Currentuser.Authdetails.RefreshToken=null
      Currentuser.Authdetails.RefreshtokencreateDate=null

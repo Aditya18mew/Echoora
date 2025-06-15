@@ -31,7 +31,7 @@ export async function ForgetPasswordaction(Email:string){
    console.log(err)
     }
 }
-export async function Logoutaction(Email:string){
+export async function Logoutaction(Email:string | undefined){
     try{
     const response=await axios.post("http://localhost:3000/api/logout",{Email:Email})
     return response.data
@@ -40,9 +40,26 @@ export async function Logoutaction(Email:string){
     }
 }
 
-export async function VerifyEmail(Email:string | undefined,otp:string){
+export async function VerifyEmailaction(Email:string | undefined,otp:string){
      try{
     const response=await axios.post("http://localhost:3000/api/sign-up/verifyemail",{Email:Email,otp:otp})
+    return response.data
+    }catch(err){
+   console.log(err)
+    }
+}
+
+export async function VerifyforResetaction(Email:string | undefined,otp:string){
+    try{
+    const response=await axios.post("http://localhost:3000/api/forgetpassword/verifyemail",{Email:Email,otp:otp})
+    return response.data
+    }catch(err){
+   console.log(err)
+    }
+}
+export async function ResetPasswordaction(Email:string | undefined ,newpassword:{newpass:string,confirmnewpass:string}){
+    try{
+    const response=await axios.post("http://localhost:3000/api/forgetpassword/verifyemail/reset",{Email:Email,Newpassword:newpassword})
     return response.data
     }catch(err){
    console.log(err)

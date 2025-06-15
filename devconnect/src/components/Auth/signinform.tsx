@@ -1,8 +1,8 @@
 "use client"
 import Link from "next/link"
 import { useState } from "react"
-import { Signinaction } from "./Serveraction"
-import { validatemail,validatepassword } from "./regex"
+import { Signinaction } from "../Serveraction"
+import { validatemail,validatepassword } from "../regex"
 
 
 type Errors={

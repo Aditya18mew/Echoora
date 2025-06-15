@@ -1,8 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { validatemail } from "./regex"
-import { ForgetPasswordaction } from "./Serveraction"
+import { validatemail } from "../regex"
+import { ForgetPasswordaction } from "../Serveraction"
+import { useRouter } from "next/navigation"
+
+
+
+
 
 type Error={
   isError:boolean,
@@ -12,6 +17,8 @@ type Error={
 
 
 export function ForgetpasswordForm(){
+  const router=useRouter()
+ 
   const [email,setemail]=useState("")
   const [error,seterror]=useState({
     isError:false,
@@ -39,6 +46,9 @@ export function ForgetpasswordForm(){
 
      try{
     const res=await ForgetPasswordaction(email)
+    if(res.success){
+        router.push(`/forgetpassword/reset?email=${encodeURIComponent(email)}`)
+  }
      }catch(err){
       console.log(err)
      }

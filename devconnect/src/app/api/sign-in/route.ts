@@ -1,6 +1,6 @@
 
 
-import { ComparePassword } from "@/components/bcrypt";
+import { ComparePassword } from "@/components/Auth/bcrypt";
 import { validatemail,validatepassword } from "@/components/regex";
 import { connectdb } from "@/db";
 import { NextResponse } from "next/server";

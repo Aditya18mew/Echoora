@@ -1,5 +1,7 @@
+
+import { ForgetpasswordForm } from "@/components/Auth/forgetpasswordform"
 import { BacktoHomebutton } from "@/components/Buttons"
-import {ForgetpasswordForm } from "@/components/forgetpasswordform"
+
 
 
 

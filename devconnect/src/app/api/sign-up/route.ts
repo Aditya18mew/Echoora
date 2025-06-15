@@ -1,4 +1,4 @@
-import { bcryptData } from "@/components/bcrypt";
+import { bcryptData } from "@/components/Auth/bcrypt";
 import { validatemail,validatepassword } from "@/components/regex";
 import { connectdb, FindOne } from "@/db";
 import { NextResponse } from "next/server";

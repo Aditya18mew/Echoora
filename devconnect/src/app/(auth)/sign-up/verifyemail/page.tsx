@@ -1,4 +1,9 @@
-import { OtpForm } from "@/components/otpform"
+import { OtpForm } from "@/components/Auth/otpsignupform"
+
+
+
+
+
 
 
 export default async function VerifyEmail({searchParams}:{

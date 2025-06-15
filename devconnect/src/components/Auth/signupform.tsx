@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
-import { Logoutaction, Signupaction } from "./Serveraction"
-import { validatemail,validatepassword } from "./regex"
+import { Signupaction } from "../Serveraction"
+import { validatemail,validatepassword } from "../regex"
 import { useRouter } from "next/navigation"
 
 

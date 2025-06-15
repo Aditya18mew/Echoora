@@ -1,10 +1,26 @@
 "use client"
 
 import { useState } from "react"
-import { validateotp } from "./regex"
-import { VerifyEmail } from "./Serveraction"
+import { validateotp } from "../regex"
+import { useRouter } from "next/navigation"
+import { VerifyforResetaction } from "../Serveraction"
+
+
+type ApiResponse= {
+   success:false,
+  Error:{
+    isError:boolean,
+    Errmessage:string
+  }
+} | {
+  success:true,
+}
+
+
+
 
 export function OtpForm({Email}:{Email:string | undefined}){
+  const router=useRouter()
  const [otp,setotp]=useState("")
  const [error,seterror]=useState({
     isError:false,
@@ -35,9 +51,13 @@ export function OtpForm({Email}:{Email:string | undefined}){
     }
 
     try{
-    const res=await VerifyEmail(Email,otp)
-    if(res.success){
-      setotp("")
+    const res:ApiResponse=await VerifyforResetaction(Email,otp)
+    setotp("")
+    if(!res.success){
+    seterror(res.Error)
+    }
+    if(Email){
+      router.push(`/forgetpassword/reset?step=${true}&email=${encodeURIComponent(Email)}`)
     }
     }catch(err){
         console.log(err)

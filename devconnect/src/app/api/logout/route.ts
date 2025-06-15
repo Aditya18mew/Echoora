@@ -1,4 +1,4 @@
-import { removejwtToken } from "@/components/jwttokens";
+import { removejwtToken } from "@/components/Auth/jwttokens";
 import { NextResponse } from "next/server";
 
 

@@ -1,7 +1,8 @@
-import { SigninForm } from "@/components/signinform";
+
 import "../../globals.css"
 import Link from "next/link";
 import { GithubButton,GoogleButton } from "@/components/Buttons";
+import { SigninForm } from "@/components/Auth/signinform";
 
 
 

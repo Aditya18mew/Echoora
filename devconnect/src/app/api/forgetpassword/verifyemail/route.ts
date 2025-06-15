@@ -1,7 +1,8 @@
-import { generatejwtToken } from "@/components/Auth/jwttokens"
-import { connectdb, FindOne } from "@/db"
-import { NextResponse } from "next/server"
 
+
+
+import { connectdb,FindOne } from "@/db";
+import { NextResponse } from "next/server";
 
 
 
@@ -12,10 +13,9 @@ export async function POST(req:Request){
 try {
       const Toverifyuser=await FindOne(Email)
     if(Toverifyuser.Authdetails.Otp===otp){
-  const {AccessToken,RefreshToken}= await generatejwtToken(Email)
        Toverifyuser.Authdetails.Otp=null
        await Toverifyuser.save()
-    return NextResponse.json({success:true,data:{AccessToken:AccessToken,RefreshToken:RefreshToken}})
+    return NextResponse.json({success:true})
     }else{
      Toverifyuser.Authdetails.Otp=null
        await Toverifyuser.save()
