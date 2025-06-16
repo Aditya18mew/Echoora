@@ -4,6 +4,7 @@ import { useState } from "react"
 import { validateotp } from "../regex"
 import { useRouter } from "next/navigation"
 import { VerifyforResetaction } from "../Serveraction"
+import { Spinnerinsidebutton } from "../Buttons"
 
 
 type ApiResponse= {
@@ -26,6 +27,7 @@ export function OtpForm({Email}:{Email:string | undefined}){
     isError:false,
     Errmessage:"Enter otp"
  })
+  const [isloading,setisloading]=useState(false)
 
  function handlechange(e){
    const {value}=e.target
@@ -38,7 +40,7 @@ export function OtpForm({Email}:{Email:string | undefined}){
 
  async function handlesubmit(e){
     e.preventDefault()
-
+   setisloading(true)
     const newerror={
         isError:!validateotp(otp),
         Errmessage:!validateotp(otp) ? "Incorrect OTP" : "Enter 6-digit"
@@ -47,6 +49,7 @@ export function OtpForm({Email}:{Email:string | undefined}){
     seterror(newerror)
     if(newerror.isError){
         setotp("")
+        setisloading(false)
         return;
     }
 
@@ -55,12 +58,15 @@ export function OtpForm({Email}:{Email:string | undefined}){
     setotp("")
     if(!res.success){
     seterror(res.Error)
+     setisloading(false)
     }
     if(Email){
       router.push(`/forgetpassword/reset?step=${true}&email=${encodeURIComponent(Email)}`)
     }
     }catch(err){
         console.log(err)
+    }finally{
+       setisloading(false)
     }
     
  }
@@ -70,6 +76,6 @@ return <form onSubmit={handlesubmit} className="flex flex-col items-center self-
     <div className="flex flex-col mt-2 mb-2.5 items-center gap-5">
          <input className={error.isError ? "forminput forminput-error":"forminput forminput-noerror"} type="text" inputMode="numeric" maxLength={6} name="otp" value={otp} onChange={handlechange} placeholder={error.isError ? error.Errmessage:"Enter 6-digit"} />
        </div>
-     <div><button type="submit"  className="formbutton">Continue</button></div>
+     <div><button type="submit"  className="formbutton">{isloading? <Spinnerinsidebutton></Spinnerinsidebutton>:"Continue"}</button></div>
 </form>
 }

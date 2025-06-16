@@ -66,3 +66,18 @@ export async function ResetPasswordaction(Email:string | undefined ,newpassword:
     }
 }
 
+/* type details={
+    Email:string | undefined | null,
+    name:string | undefined | null,
+    Image:string | undefined | null
+} */
+
+/* export async function SigninthroughGoogle({Email,name,Image}:details){
+    try{
+        console.log(Email,name,Image)
+    const response=await axios.post("http://localhost:3000/api/sign-in/google",{Email:Email})
+    }catch(err){
+   console.log(err)
+    }
+} */
+

@@ -8,7 +8,12 @@ import mongoose from "mongoose";
         Otp:String,
         RefreshToken:String,
         RefreshtokencreateDate:Date,
-        RefreshtokenexpiryDate:Date
+        RefreshtokenexpiryDate:Date,
+        googleAuthDetails:{
+            ProviderId:String,
+            name:String,
+            Image:String,
+        }
         }
         })
 

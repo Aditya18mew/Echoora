@@ -4,6 +4,8 @@ import { useState } from "react"
 import { validatemail } from "../regex"
 import { ForgetPasswordaction } from "../Serveraction"
 import { useRouter } from "next/navigation"
+import { Spinnerinsidebutton } from "../Buttons"
+
 
 
 
@@ -12,6 +14,16 @@ import { useRouter } from "next/navigation"
 type Error={
   isError:boolean,
   Errmessage:string
+}
+type Apiresponse={
+  success:true,
+  message:string
+} | {
+  success:false,
+  Error:{
+    isError:boolean,
+    Errmessage:string
+  }
 }
 
 
@@ -24,6 +36,7 @@ export function ForgetpasswordForm(){
     isError:false,
     Errmessage:"Email is required"
   })
+  const [isloading,setisloading]=useState(false)
  
   function handlechange(e){
     const {value}=e.target
@@ -32,7 +45,7 @@ export function ForgetpasswordForm(){
   }
   async function handlesubmit(e){
      e.preventDefault()
-
+      setisloading(true)
      const newerror:Error={
           isError:email.trim()==="" || !(validatemail(email)),
           Errmessage:!validatemail(email) ? "invalid Email": "Email is required"
@@ -41,16 +54,23 @@ export function ForgetpasswordForm(){
      seterror(newerror)
      if(error.isError){
       setemail("")
+       setisloading(false)
       return;
      }
 
      try{
-    const res=await ForgetPasswordaction(email)
-    if(res.success){
-        router.push(`/forgetpassword/reset?email=${encodeURIComponent(email)}`)
-  }
+    const res:Apiresponse=await ForgetPasswordaction(email)
+    if(!res.success){
+      seterror(res.Error)
+        setemail("")
+       setisloading(false)
+    }
+     router.push(`/forgetpassword/reset?email=${encodeURIComponent(email)}`)
+  
      }catch(err){
       console.log(err)
+     }finally{
+       setisloading(false)
      }
   }
 
@@ -62,7 +82,7 @@ return (
        <div className="flex flex-col mt-2 mb-2.5 items-center gap-5">
          <input className={error.isError? "forminput forminput-error":"forminput forminput-noerror"} type="text" placeholder={error.isError? error.Errmessage:"Email"} name="Email" value={email} onChange={handlechange} />
        </div>
-       <div><button type="submit"  className="formbutton">Continue</button></div>
+       <div><button type="submit"  className="formbutton">{isloading? <Spinnerinsidebutton></Spinnerinsidebutton>:"Continue"}</button></div>
     </form>
 )
 }

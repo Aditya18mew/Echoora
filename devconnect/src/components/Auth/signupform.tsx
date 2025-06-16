@@ -3,6 +3,8 @@ import { useState } from "react"
 import { Signupaction } from "../Serveraction"
 import { validatemail,validatepassword } from "../regex"
 import { useRouter } from "next/navigation"
+import { Spinnerinsidebutton } from "../Buttons"
+
 
 
 type Errors={
@@ -15,6 +17,14 @@ type Errors={
     Errmessage:string
   }
 }
+type Apiresponse={
+  success:false,
+  error:{
+    isError:boolean,
+    Errmessage:string}
+  } | {
+    success:true
+  }
 
 
 export function SignupForm(){
@@ -34,6 +44,7 @@ const [formData,setformData]=useState({
     Errmessage:"Password is required"
   }
  })
+ const [isloading,setisloading]=useState(false)
 
 
 
@@ -45,7 +56,7 @@ const [formData,setformData]=useState({
 
 async function handlesubmit(e){
     e.preventDefault()
-
+     setisloading(true)
     const newerror:Errors={
       Email:{
         isError:formData.Email.trim()==="" || !(validatemail(formData.Email)),
@@ -60,16 +71,23 @@ async function handlesubmit(e){
     if(newerror.Email.isError || newerror.Password.isError){
       if(newerror.Email.isError)  setformData(prev=>({...prev,Email:""}))
       if(newerror.Password.isError)  setformData(prev=>({...prev,Password:""}))
+        setisloading(false)
       return;
     }
 
 try{
-  const res= await Signupaction(formData)
-  if(res.success){
-   router.push(`/sign-up/verifyemail?email=${encodeURIComponent(formData.Email)}`)
+  const res:Apiresponse= await Signupaction(formData)
+  if(!res.success){
+    seterrors(prev=>({...prev,Email:res.error}))
+     setformData(prev=>({...prev,Email:""}))
+     setisloading(false)
+     return
   }
+  router.push(`/sign-up/verifyemail?email=${encodeURIComponent(formData.Email)}`)
 }catch(err){
   console.log(err)
+}finally{
+  setisloading(false)
 }
 }
 
@@ -82,7 +100,7 @@ return (
          <input className={errors.Email.isError? "forminput forminput-error":"forminput forminput-noerror"} type="text" placeholder={errors.Email.isError? errors.Email.Errmessage:"Email"} name="Email"  value={formData.Email} onChange={handlechange}/>
         <input className={errors.Password.isError? "forminput forminput-error":"forminput forminput-noerror"} type="password" placeholder={errors.Password.isError? errors.Password.Errmessage:"Create password"} name="Password" value={formData.Password} onChange={handlechange} />
        </div>
-       <div><button type="submit" className="formbutton">Continue</button></div>
+       <div><button type="submit" className="formbutton">{isloading? <Spinnerinsidebutton></Spinnerinsidebutton>:"Continue"}</button></div>
     </form>
 )
     

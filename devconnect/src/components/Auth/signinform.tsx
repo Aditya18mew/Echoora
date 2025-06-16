@@ -3,6 +3,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { Signinaction } from "../Serveraction"
 import { validatemail,validatepassword } from "../regex"
+import { Spinnerinsidebutton } from "../Buttons"
 
 
 type Errors={
@@ -22,7 +23,6 @@ type Errors={
 
 
 export function SigninForm(){
-
   const [formData,setformData]=useState({
     Email:"",
     Password:""
@@ -37,6 +37,7 @@ export function SigninForm(){
       Errmessage:"Password is required"
     }
    })
+   const [isloading,setisloading]=useState(false)
   
   
   
@@ -48,6 +49,7 @@ export function SigninForm(){
   
   async function handlesubmit(e){
       e.preventDefault()
+      setisloading(true)
        const newerror:Errors={
             Email:{
               isError:formData.Email.trim()==="" || !(validatemail(formData.Email)),
@@ -61,13 +63,27 @@ export function SigninForm(){
        if(newerror.Email.isError || newerror.Password.isError){
       if(newerror.Email.isError)  setformData(prev=>({...prev,Email:""}))
       if(newerror.Password.isError)  setformData(prev=>({...prev,Password:""}))
+      setisloading(false)
       return;
     }
   try{
    const res=await Signinaction(formData)
-    console.log(res)
+  if(!res.success){
+    if(res.Error && (res.Error.type==="PasswordError" || res.Error.type==="Error") ) {
+     seterrors(prev=>({...prev,Password:res.Error.Password}))
+     setformData(prev=>({...prev,Password:""}))}
+    if(res.Error && res.Error.type==="EmailError"){ 
+      seterrors(prev=>({...prev,Email:res.Error.Email}))
+       setformData(prev=>({...prev,Email:""}))
+    }
+    setisloading(false)
+    return
+  }
+   console.log(res)
   }catch(err){
     console.log(err)
+  }finally{
+    setisloading(false)
   }
   }
   
@@ -83,7 +99,7 @@ return (
         <input className={errors.Password.isError? "forminput forminput-error":"forminput forminput-noerror"} type="password" placeholder={errors.Password.isError? errors.Password.Errmessage:"Password"} name="Password" value={formData.Password} onChange={handlechange} />
       </div>
         <Link className="formlink" href="/forgetpassword">Forget password?</Link>
-        <div><button type="submit" className="formbutton">Continue</button></div>
+        <div><button type="submit" className="formbutton">{isloading? <Spinnerinsidebutton></Spinnerinsidebutton>:"Continue"}</button></div>
     </form>
 )
     

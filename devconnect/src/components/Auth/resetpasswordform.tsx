@@ -4,6 +4,8 @@ import { useState } from "react"
 import { validatepassword } from "../regex"
 import { ResetPasswordaction } from "../Serveraction"
 import { useRouter } from "next/navigation"
+import { Spinnerinsidebutton } from "../Buttons"
+
 
 
 
@@ -23,6 +25,7 @@ export  function ResetPasswordForm({Email}:{Email:string | undefined}){
         Errmessage:"password is required"
     }
  })
+  const [isloading,setisloading]=useState(false)
 
  function handlechange(e){
     const {name,value}=e.target
@@ -41,6 +44,7 @@ export  function ResetPasswordForm({Email}:{Email:string | undefined}){
 
  async function handlesubmit(e){
     e.preventDefault()
+    setisloading(true)
     const newerror={
         newpass:{
             isError:!validatepassword(newpassword.newpass) ,
@@ -55,6 +59,7 @@ export  function ResetPasswordForm({Email}:{Email:string | undefined}){
     if(newerror.newpass.isError || newerror.confirmnewpass.isError){
       if(newerror.newpass.isError)  setnewpassword(prev=>({...prev,newpass:""}))
       if(newerror.confirmnewpass.isError)  setnewpassword(prev=>({...prev,confirmnewpass:""}))
+        setisloading(false)
       return;
     }
     
@@ -62,10 +67,14 @@ export  function ResetPasswordForm({Email}:{Email:string | undefined}){
    const res=await ResetPasswordaction(Email,newpassword)
      if(!res.success){
         seterror(prev=>({...prev,confirmnewpass:res.Error}))
+         setnewpassword(prev=>({...prev,confirmnewpass:""}))
+        setisloading(false)
      }
    router.replace("/sign-in")
     }catch(err){
         console.log(err)
+    }finally{
+        setisloading(false)
     }
  }
 
@@ -75,7 +84,7 @@ return (
          <input className={error.newpass.isError? "forminput forminput-error":"forminput forminput-noerror"} type="password" placeholder={error.newpass.isError? error.newpass.Errmessage:"new password"} name="newpass"  value={newpassword.newpass} onChange={handlechange}/>
         <input className={error.confirmnewpass.isError? "forminput forminput-error":"forminput forminput-noerror"} type="password" placeholder={error.confirmnewpass.isError? error.confirmnewpass.Errmessage:"Confirm new password"} name="confirmnewpass" value={newpassword.confirmnewpass} onChange={handlechange} />
        </div>
-       <div><button type="submit" className="formbutton">Continue</button></div>
+       <div><button type="submit" className="formbutton">{isloading? <Spinnerinsidebutton></Spinnerinsidebutton>:"Continue"}</button></div>
     </form>
 )
 

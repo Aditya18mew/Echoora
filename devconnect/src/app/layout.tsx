@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import SessionWrapper from "@/components/ClientWrapper";
+
+
 
 
 
@@ -16,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+     <SessionWrapper>{children}</SessionWrapper>
       </body>
     </html>
   );

@@ -22,7 +22,7 @@ type ComparePasswordResponse=
     isError:boolean,
   Errmessage:string
 } 
-} | undefined
+} | {type:string,Errmessage:string} | undefined
 
 
 
@@ -37,6 +37,7 @@ export async function POST(req:Request){
           if(response.type==="Tokens") return NextResponse.json({success:true,data:response})
           if(response.type==="PasswordError") return NextResponse.json({success:false,Error:response})
           if(response.type==="EmailError") return NextResponse.json({success:false,Error:response})
+          if(response.type==="Error") return NextResponse.json({success:false,Error:response})
           }
         
      }else{

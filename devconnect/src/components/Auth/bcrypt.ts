@@ -1,7 +1,7 @@
 import { FindOne, User } from "@/db"
 import bcrypt from "bcrypt"
 import { generatejwtToken } from "./jwttokens"
-import { Mailotp } from "./nodemailer"
+import { SignupMailotp } from "./nodemailer"
 import { randomInt } from "crypto"
 
 
@@ -32,7 +32,7 @@ export async function bcryptData(formData:formData){
         }
        })
         await newUser.save()
-        const res:MailtopResponse= await Mailotp(formData.Email,otp)
+        const res:MailtopResponse= await SignupMailotp(formData.Email,otp)
          if(typeof res !=="undefined"){
             return   {success:res.success}
          }
@@ -55,6 +55,7 @@ export async function ComparePassword(formData:formData){
     }
     }catch(err){
         console.log(err)
+         return {type:"Error",Password:{isError:true,Errmessage:"incorrect password"}}
     }
 }
 
