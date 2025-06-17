@@ -38,3 +38,19 @@ export async function FindOne(Email:string){
         console.log(err)
     }
 }
+
+
+
+
+export async function CreateUser(Email:string){
+    try{
+         const newUser=await new User({
+                Authdetails:{
+                    Email:Email
+                }
+            })
+            await newUser.save()
+    }catch(err){
+        console.log(err)
+    }
+}

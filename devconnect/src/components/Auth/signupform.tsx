@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { Signupaction } from "../Serveraction"
+import { Logoutaction, Signupaction } from "../Serveraction"
 import { validatemail,validatepassword } from "../regex"
 import { useRouter } from "next/navigation"
 import { Spinnerinsidebutton } from "../Buttons"
@@ -83,6 +83,7 @@ try{
      setisloading(false)
      return
   }
+  await Logoutaction(formData.Email)
   router.push(`/sign-up/verifyemail?email=${encodeURIComponent(formData.Email)}`)
 }catch(err){
   console.log(err)

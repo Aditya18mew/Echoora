@@ -23,7 +23,7 @@ export async function generatejwtToken(email:string){
         id:Currentuser._id,
         Email:Currentuser.Authdetails.Email
       },ACCESS_TOKEN_SECRET,{expiresIn:"15m"})
-
+ 
     const RefreshToken=jwt.sign({
         id:Currentuser._id,
         Email:Currentuser.Authdetails.Email
@@ -49,4 +49,37 @@ export async function removejwtToken(email:string){
  }catch(err){
   console.log(err)
  }
+}
+
+export async function GetjwtTokens(email:string,name:string,image:string){
+       const Currentuser=await FindOne(email)
+
+  if(typeof ACCESS_TOKEN_SECRET!=="string"){
+    throw new Error("Access token must be defined")
+  }
+  if(typeof REFRESH_TOKEN_SECRET!=="string"){
+    throw new Error("Refresh token must be defined")
+  }
+
+   const AccessToken=jwt.sign({
+        id:Currentuser._id,
+        Email:Currentuser.Authdetails.Email
+      },ACCESS_TOKEN_SECRET,{expiresIn:"15m"})
+ 
+    const RefreshToken=jwt.sign({
+        id:Currentuser._id,
+        Email:Currentuser.Authdetails.Email
+      },REFRESH_TOKEN_SECRET,{expiresIn:"7d"})
+
+
+    Currentuser.Authdetails.RefreshToken=RefreshToken
+    Currentuser.Authdetails.RefreshtokencreateDate=Date.now()
+    Currentuser.Authdetails.RefreshtokenexpiryDate=Date.now() + 7*24*60*60*1000
+    Currentuser.Authdetails.googleAuthDetails.ProviderId="google"
+    Currentuser.Authdetails.googleAuthDetails.name=name
+    Currentuser.Authdetails.googleAuthDetails.Image=image
+    await Currentuser.save()
+     
+   
+       return {success:true,AccessToken:AccessToken,RefreshToken:RefreshToken}  
 }

@@ -1,9 +1,14 @@
 "use client"
 import Link from "next/link"
 import { useState } from "react"
-import { Signinaction } from "../Serveraction"
+import {Signinaction, SigninfromGoogle } from "../Serveraction"
 import { validatemail,validatepassword } from "../regex"
 import { Spinnerinsidebutton } from "../Buttons"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+
+
+
 
 
 type Errors={
@@ -23,6 +28,8 @@ type Errors={
 
 
 export function SigninForm(){
+  const router=useRouter()
+  const {data:session}=useSession()
   const [formData,setformData]=useState({
     Email:"",
     Password:""
@@ -46,6 +53,20 @@ export function SigninForm(){
        seterrors(prev=>({...prev,[name]:{isError:false}}))
        setformData({...formData,[name]:value})
    }
+
+    if(session){
+         googlesignup()
+      }
+      async function googlesignup(){
+        try{
+          const res=await SigninfromGoogle(session?.user?.email,session?.user?.name,session?.user?.image)
+          if(res.success){
+            router.push("/profile")
+          }
+        }catch(err){
+           console.log(err)
+        }
+      }
   
   async function handlesubmit(e){
       e.preventDefault()
@@ -79,7 +100,9 @@ export function SigninForm(){
     setisloading(false)
     return
   }
+
    console.log(res)
+    router.push("/profile")
   }catch(err){
     console.log(err)
   }finally{

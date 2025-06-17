@@ -1,6 +1,7 @@
 "use client"
 
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider} from "next-auth/react";
+
 
 
 
@@ -14,3 +15,5 @@ export default function SessionWrapper({
 }>) {
   return    <SessionProvider>{children}</SessionProvider>
 }
+
+

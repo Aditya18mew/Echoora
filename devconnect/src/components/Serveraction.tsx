@@ -1,5 +1,6 @@
 import axios from "axios"
 
+
 type formData={
  Email:string,
   Password:string
@@ -65,19 +66,13 @@ export async function ResetPasswordaction(Email:string | undefined ,newpassword:
    console.log(err)
     }
 }
+type data=string | null | undefined
 
-/* type details={
-    Email:string | undefined | null,
-    name:string | undefined | null,
-    Image:string | undefined | null
-} */
-
-/* export async function SigninthroughGoogle({Email,name,Image}:details){
-    try{
-        console.log(Email,name,Image)
-    const response=await axios.post("http://localhost:3000/api/sign-in/google",{Email:Email})
+export async function SigninfromGoogle(Email:data,name:data,Image:data){
+     try{
+    const response=await axios.post("http://localhost:3000/api/auth/set-cookie",{Email:Email,Name:name,Image:Image})
+    return response.data
     }catch(err){
    console.log(err)
     }
-} */
-
+}
