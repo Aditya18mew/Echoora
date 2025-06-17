@@ -27,6 +27,7 @@ export async function bcryptData(formData:formData){
         const newUser=new User({
         Authdetails:{
             Email:formData.Email,
+            username:formData.Email.slice(0,6) + randomInt(100,999).toString(),
             Password:hashPassword,
             Otp:otp
         }

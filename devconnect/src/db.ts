@@ -1,9 +1,17 @@
 import mongoose from "mongoose";
 
 
+
         const UserSchema=new mongoose.Schema({
         Authdetails:{
         Email:String,
+        username:{
+            type:String,
+            required:true,
+            unique:true,
+            trim:true,
+            lowercase:true
+        },
         Password:String,
         Otp:String,
         RefreshToken:String,

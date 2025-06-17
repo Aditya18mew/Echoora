@@ -152,3 +152,60 @@ font-weight: 500;
   transform: rotate(360deg);
  }
 }
+
+.outerlayer{
+  min-height: 100vh;
+  display: flex;
+  background-color: #f3f4f6;
+  flex-direction: column;
+}
+
+.toplayer{
+  width: 100%;
+  text-align: start;
+  border: 1px solid black;
+  height: 10vh;
+  display:  flex;
+  align-items: center;
+  padding-left: 16px;
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: white;
+}
+.bottomlayer{
+  display: flex;
+  flex-direction: row;
+}
+.leftside{
+  width: 25%;
+  border: 1px solid black;
+ min-height: 90vh;
+ display: flex;
+ flex-direction: column;
+padding: 10px;
+}
+.rightside{
+  width: 75%;
+  border: 1px solid black;
+   min-height: 90vh;
+}
+.image{
+  margin: 10px;
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  align-self: center;
+  border-radius: 50%;
+}
+.options{
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.options h1{
+  padding: 5px;
+  border: 1px solid black;
+  height: 40px;
+}
