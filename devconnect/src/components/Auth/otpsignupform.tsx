@@ -3,9 +3,10 @@
 import { useState } from "react"
 import { validateotp } from "../regex"
 import { useRouter } from "next/navigation"
-import { Logoutaction } from "../Serveraction"
 import { VerifyEmailaction } from "@/components/Serveraction"
 import { Spinnerinsidebutton } from "../Buttons"
+
+
 
 
 
@@ -21,6 +22,8 @@ type ApiResponse={
     Errmessage:string
   }
 }
+
+
 
 
 
@@ -66,8 +69,9 @@ export function OtpForm({Email}:{Email:string | undefined}){
     seterror(res.Error)
     setisloading(false)
     }
-     await Logoutaction(Email)
-      {/* do something later*/}
+    if(res.success){
+      router.push("/sign-up/verifyemail/submitdetails") 
+    }
     }catch(err){
         console.log(err)
     }finally{

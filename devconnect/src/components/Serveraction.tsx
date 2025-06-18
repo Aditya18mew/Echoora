@@ -18,7 +18,7 @@ export async function Signupaction(formData:formData){
 }
 export async function Signinaction(formData:formData){
     try{
-    const response=await axios.post("http://localhost:3000/api/sign-in",{Authdetails:formData})
+    const response=await axios.post("http://localhost:3000/api/sign-in",{Authdetails:formData},{withCredentials:true})
     return response.data
     }catch(err){
    console.log(err)
@@ -43,8 +43,8 @@ export async function Logoutaction(Email:string | undefined){
 
 export async function VerifyEmailaction(Email:string | undefined,otp:string){
      try{
-    const response=await axios.post("http://localhost:3000/api/sign-up/verifyemail",{Email:Email,otp:otp})
-    return response.data
+    const response=await axios.post("http://localhost:3000/api/sign-up/verifyemail",{Email:Email,otp:otp},{withCredentials:true})
+       return response.data
     }catch(err){
    console.log(err)
     }

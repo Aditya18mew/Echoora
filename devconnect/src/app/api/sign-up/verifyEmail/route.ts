@@ -15,7 +15,23 @@ try {
   const {AccessToken,RefreshToken}= await generatejwtToken(Email)
        Toverifyuser.Authdetails.Otp=null
        await Toverifyuser.save()
-    return NextResponse.json({success:true,data:{AccessToken:AccessToken,RefreshToken:RefreshToken}})
+       const isProd=process.env.NODE_ENV==="production"
+    const response= NextResponse.json({success:true})
+     response.cookies.set(`AccessToken`,AccessToken,{
+            httpOnly:true,
+            secure:isProd,
+            sameSite:"strict",
+            maxAge:60*15,
+            path:"/"
+           })
+    response.cookies.set(`RefreshToken`,RefreshToken,{
+      httpOnly:true,
+      secure:isProd,
+      sameSite:"strict",
+      maxAge:60*60*24*7,
+      path:"/"
+    })
+    return response
     }else{
      Toverifyuser.Authdetails.Otp=null
        await Toverifyuser.save()

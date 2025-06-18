@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation"
 
 
 
+
+
 type Errors={
   Email:{
     isError:boolean,
@@ -61,7 +63,7 @@ export function SigninForm(){
         try{
           const res=await SigninfromGoogle(session?.user?.email,session?.user?.name,session?.user?.image)
           if(res.success){
-            router.push("/profile")
+            router.push("/dashboard")
           }
         }catch(err){
            console.log(err)
@@ -100,9 +102,8 @@ export function SigninForm(){
     setisloading(false)
     return
   }
-
-   console.log(res)
-    router.push("/profile")
+  if(res.success)
+    router.push("/dashboard")
   }catch(err){
     console.log(err)
   }finally{

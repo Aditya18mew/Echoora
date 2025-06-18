@@ -3,26 +3,27 @@
 import { ComparePassword } from "@/components/Auth/bcrypt";
 import { validatemail,validatepassword } from "@/components/regex";
 import { connectdb } from "@/db";
+import { read } from "fs";
 import { NextResponse } from "next/server";
 
 type ComparePasswordResponse=
 {  
-  type:string
+  what:"Tokens"
   AccessToken:string,
   RefreshToken:string
 } | {
-  type:string
+  what:"EmailError"
   Email:{ 
     isError:boolean,
   Errmessage:string
 }
 } | {
-  type:string
+  what:"PasswordError"
   Password:{ 
     isError:boolean,
   Errmessage:string
 } 
-} | {type:string,Errmessage:string} | undefined
+} | {what:"Error",Errmessage:string} | undefined
 
 
 
@@ -34,11 +35,28 @@ export async function POST(req:Request){
      if(validatepassword(Authdetails.Password)){
           const response:ComparePasswordResponse=await ComparePassword(Authdetails)
           if(typeof response!=="undefined"){
-          if(response.type==="Tokens") return NextResponse.json({success:true,data:response})
-          if(response.type==="PasswordError") return NextResponse.json({success:false,Error:response})
-          if(response.type==="EmailError") return NextResponse.json({success:false,Error:response})
-          if(response.type==="Error") return NextResponse.json({success:false,Error:response})
+          if(response.what==="Tokens"){
+            const isProd=process.env.NODE_ENV==="production"
+           const res=NextResponse.json({success:true})
+           res.cookies.set(`AccessToken`,response.AccessToken,{
+            httpOnly:true,
+            secure:isProd,
+            sameSite:"strict",
+            maxAge:60*15,
+            path:"/"
+           })
+           res.cookies.set(`RefreshToken`,response.RefreshToken,{
+            httpOnly:true,
+            secure:isProd,
+            sameSite:"strict",
+            maxAge:60*60*24*7,
+            path:"/"
+           })
+             return res
           }
+          if(response.what==="PasswordError") return NextResponse.json({success:false,Error:response})
+          if(response.what==="EmailError") return NextResponse.json({success:false,Error:response})
+          if(response.what==="Error") return NextResponse.json({success:false,Error:response})
         
      }else{
        return NextResponse.json({success:false,error:{Password:{iSError:true,Errmessage:"Enter a valid Email"}}})
@@ -46,4 +64,5 @@ export async function POST(req:Request){
    }else{
       return NextResponse.json({success:false,error:{Email:{iSError:true,Errmessage:"Enter a valid Email"}}})
    }
+}
 }

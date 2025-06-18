@@ -22,6 +22,14 @@ import mongoose from "mongoose";
             name:String,
             Image:String,
         }
+        },
+        Biodetails:{
+            name:String,
+            Experience:String,
+            Education:String,
+            Location:String,
+            skills:[],
+            sociallinks:[]
         }
         })
 
