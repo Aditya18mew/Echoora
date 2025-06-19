@@ -1,6 +1,9 @@
 
 import { FindOne } from "@/db"
+
 import jwt from "jsonwebtoken"
+
+
 
 
 
@@ -83,3 +86,36 @@ export async function GetjwtTokens(email:string,name:string,image:string){
    
        return {success:true,AccessToken:AccessToken,RefreshToken:RefreshToken}  
 }
+
+export async function VerifyToken(AccessToken:string){
+    try{
+        if(typeof ACCESS_TOKEN_SECRET!=="string"){
+    throw new Error("Access token must be defined")
+  }
+    const decodedemail=jwt.verify(AccessToken,ACCESS_TOKEN_SECRET).Email
+    const Currenuser=await FindOne(decodedemail)
+    const user={
+     Email: Currenuser.Authdetails.Email,
+     username:Currenuser.Authdetails.username,
+     Biodetails:Currenuser.Biodetails
+    }
+    return user
+    }catch(err){
+      console.log(err)
+    }
+}
+
+
+export async function VerifyRefreshToken(RefreshToken:string){
+    try{
+      if(typeof REFRESH_TOKEN_SECRET!=="string"){
+    throw new Error("Refresh token must be defined")
+  }
+
+    const {Email}=jwt.verify(RefreshToken,REFRESH_TOKEN_SECRET)
+    return Email
+    }catch(err){
+      console.log(err)
+    }
+}
+

@@ -2,10 +2,20 @@ import Image from "next/image";
 import profile from "@/components/icons/profile.svg"
 import Link from "next/link";
 
+type prop={
+  isOwner:boolean,
+  user:{
+    Email:string,
+    username:string,
+    Biodetails:{
+      skills:[],
+      sociallinks:[]
+    }
+  } | undefined
+}
 
 
-
-export default function Profile() {
+export default function Profile({isOwner,user}:prop) {
   return (
     <div className="w-full bg-[#1A1A1A] border-2 border-[#2e2e2e]">
      <div className=" pl-15 pr-15 mt-4">
@@ -61,6 +71,14 @@ export default function Profile() {
             </div>
           </div> 
       </div>
+      <div className="mt-4 pl-15 pr-15">
+        <div className=" border-2 rounded-2xl h-20 border-[#2e2e2e] flex flex-row items-center gap-4 pl-4">
+          <h1 className="mt-6 mb-4 text-white">link 1</h1>
+          <h1 className="mt-6 mb-4 text-white">link 2</h1>
+          <h1 className="mt-6 mb-4 text-white">link 3</h1>
+        </div>
+      </div>
      </div>
+
   )
 }

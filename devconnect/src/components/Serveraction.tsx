@@ -76,3 +76,5 @@ export async function SigninfromGoogle(Email:data,name:data,Image:data){
    console.log(err)
     }
 }
+
+

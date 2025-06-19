@@ -28,6 +28,7 @@ import mongoose from "mongoose";
             Experience:String,
             Education:String,
             Location:String,
+            WorkPlace:String,
             skills:[],
             sociallinks:[]
         }
