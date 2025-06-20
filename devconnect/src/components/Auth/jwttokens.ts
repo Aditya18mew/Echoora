@@ -1,6 +1,6 @@
 
-import { FindOne } from "@/db"
 
+import { FindOne } from "@/db"
 import jwt from "jsonwebtoken"
 
 
@@ -97,7 +97,19 @@ export async function VerifyToken(AccessToken:string){
     const user={
      Email: Currenuser.Authdetails.Email,
      username:Currenuser.Authdetails.username,
-     Biodetails:Currenuser.Biodetails
+     Biodetails:{
+            name:Currenuser.Biodetails.name,
+            Experience:Currenuser.Biodetails.Experience,
+            Education:Currenuser.Biodetails.Education,
+            Location:Currenuser.Biodetails.Location,
+            WorkPlace:Currenuser.Biodetails.WorkPlace,
+            skills:Currenuser.Biodetails.skills,
+            sociallinks:{
+                Instagram:Currenuser.Biodetails.sociallinks.Instagram,
+                Github:Currenuser.Biodetails.sociallinks.Github,
+                Linkedin:Currenuser.Biodetails.sociallinks.Linkedin
+            }
+        }
     }
     return user
     }catch(err){

@@ -23,7 +23,7 @@ export  default async function ProfilePage({
   if(AccessToken){
     try{
     const currentuser=await VerifyToken(AccessToken)
-    user=currentuser
+     user=currentuser
     isowner=username===currentuser?.username
     }catch(err){
       console.log(err)

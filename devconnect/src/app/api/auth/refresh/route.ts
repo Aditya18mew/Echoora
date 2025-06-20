@@ -9,14 +9,12 @@ const ACCESS_TOKEN_SECRET=process.env.ACCESS_TOKEN_SECRET
 
 
 
-export default async function GET(req:NextRequest){
+export  async function GET(req:NextRequest){
     await connectdb()
   const RefreshToken=req.cookies.get("RefreshToken")?.value
- console.log(RefreshToken)
-  if(!RefreshToken){
+ if(!RefreshToken){
        return NextResponse.json({error:"No refresh Token"},{status:401})
   }
-   
    try{
     const Email=await VerifyRefreshToken(RefreshToken)
      if(!Email){
@@ -34,16 +32,17 @@ export default async function GET(req:NextRequest){
           },ACCESS_TOKEN_SECRET,{expiresIn:"15m"})
 
             const isProd=process.env.NODE_ENV==="production"
-     const response=NextResponse.json({success:true})
+     const response=NextResponse.json({success:true,AccessToken:AccessToken})
 
-      response.cookies.set(`AccessToken`,AccessToken,{
+   /*    response.cookies.set(`AccessToken`,AccessToken,{
             httpOnly:true,
             secure:isProd,
             sameSite:"strict",
             maxAge:60*15,
             path:"/"
-           })
-    
+           }) */
+ return response
+ 
    }catch(err){
     console.log(err)
    }

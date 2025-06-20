@@ -66,7 +66,6 @@ async function handlesubmit(e){
         isError:formData.Password.trim()==="" || !(validatepassword(formData.Password)),
         Errmessage:!validatepassword(formData.Password) ? "8 characters with 1 alphabet and 1 digit" : "Password is required"
       }}
-
       seterrors(newerror)
     if(newerror.Email.isError || newerror.Password.isError){
       if(newerror.Email.isError)  setformData(prev=>({...prev,Email:""}))

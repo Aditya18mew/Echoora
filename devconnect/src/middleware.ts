@@ -1,7 +1,7 @@
 import { NextRequest ,NextResponse} from "next/server";
 
 export const config={
-    matcher:["/dashboard/:path*","/"]
+    matcher:["/dashboard:path*"]
 }
 
 
@@ -19,7 +19,9 @@ export async function middleware(req:NextRequest){
         })
 
         const data=await res.json()
-        if(data.AccessToken){
+
+
+         if(data.AccessToken){
             const isProd=process.env.NODE_ENV==="production"
             const response=NextResponse.next()
              response.cookies.set(`AccessToken`,data.AccessToken,{
@@ -30,7 +32,7 @@ export async function middleware(req:NextRequest){
             path:"/"
            })
            return response
-        }
+        } 
         return NextResponse.redirect(new URL("/sign-in",req.url))
     }
     return NextResponse.next()

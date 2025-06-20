@@ -170,6 +170,17 @@ font-weight: 500;
   align-items: center;
 }
 
+.popupdiv{
+      background-color: white;
+padding:12.5px;
+  width: 375px;
+  color: black;
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+ border-radius: 20px;
+}
+
 
 
 

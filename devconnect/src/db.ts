@@ -30,7 +30,11 @@ import mongoose from "mongoose";
             Location:String,
             WorkPlace:String,
             skills:[],
-            sociallinks:[]
+            sociallinks:{
+                Instagram:String,
+                Github:String,
+                Linkedin:String
+            }
         }
         })
 
@@ -59,15 +63,3 @@ export async function FindOne(Email:string){
 
 
 
-export async function CreateUser(Email:string){
-    try{
-         const newUser=await new User({
-                Authdetails:{
-                    Email:Email
-                }
-            })
-            await newUser.save()
-    }catch(err){
-        console.log(err)
-    }
-}

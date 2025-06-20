@@ -18,14 +18,16 @@ export async function POST(req:Request){
       const Olduser=await FindOne(Authdetails.Email)
       if(Olduser) return NextResponse.json({success:false,error:{isError:true,Errmessage:"Account with this email already exist"}})
          const response:bcryptDataResponse=await bcryptData(Authdetails)
+        console.log(response)
          if(typeof response !=="undefined"){
               return NextResponse.json({success:true})
+          }else{
+                 return NextResponse.json({success:true,error:{isError:true,Errmessage:"Server error"}})
           }
-    else{
-      return NextResponse.json({success:false,error:{Password:{iSError:true,Errmessage:"Enter a valid Email"}}})
-    }
   }else{
-     return NextResponse.json({success:false,error:{Email:{iSError:true,Errmessage:"Enter a valid Email"}}})
+     return NextResponse.json({success:false,error:{Password:{iSError:true,Errmessage:"Enter a valid Password"}}})
   }
+}else{
+     return NextResponse.json({success:false,error:{Email:{iSError:true,Errmessage:"Enter a valid Email"}}})
 }
 }

@@ -14,6 +14,14 @@ try {
     if(Toverifyuser.Authdetails.Otp===otp){
   const {AccessToken,RefreshToken}= await generatejwtToken(Email)
        Toverifyuser.Authdetails.Otp=null
+       Toverifyuser.Biodetails.name=""
+       Toverifyuser.Biodetails.Experience=""
+       Toverifyuser.Biodetails.Education=""
+       Toverifyuser.Biodetails.Location=""
+       Toverifyuser.Biodetails.WorkPlace=""
+       Toverifyuser.Biodetails.sociallinks.Instagram=""
+       Toverifyuser.Biodetails.sociallinks.Github=""
+       Toverifyuser.Biodetails.sociallinks.Linkedin=""
        await Toverifyuser.save()
        const isProd=process.env.NODE_ENV==="production"
     const response= NextResponse.json({success:true})
