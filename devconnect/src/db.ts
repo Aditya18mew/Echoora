@@ -60,6 +60,36 @@ export async function FindOne(Email:string){
     }
 }
 
+export async function Getuserbyusername(username:string){
+    try{
+        const getUser=await User.findOne({"Authdetails.username":username})
+        if(!getUser){
+            return {success:false}
+        }
+       const user={
+     Email:getUser.Authdetails.Email,
+     username:getUser.Authdetails.username,
+     Biodetails:{
+            name:getUser.Biodetails.name,
+            Experience:getUser.Biodetails.Experience,
+            Education:getUser.Biodetails.Education,
+            Location:getUser.Biodetails.Location,
+            WorkPlace:getUser.Biodetails.WorkPlace,
+            skills:getUser.Biodetails.skills,
+            sociallinks:{
+                Instagram:getUser.Biodetails.sociallinks.Instagram,
+                Github:getUser.Biodetails.sociallinks.Github,
+                Linkedin:getUser.Biodetails.sociallinks.Linkedin
+            }
+        }
+    }
+    return {success:true,user:user}
+    }catch(err){
+        console.log(err)
+    }
+
+}
+
 
 
 

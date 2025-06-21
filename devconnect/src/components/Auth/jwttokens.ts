@@ -95,21 +95,7 @@ export async function VerifyToken(AccessToken:string){
     const decodedemail=jwt.verify(AccessToken,ACCESS_TOKEN_SECRET).Email
     const Currenuser=await FindOne(decodedemail)
     const user={
-     Email: Currenuser.Authdetails.Email,
      username:Currenuser.Authdetails.username,
-     Biodetails:{
-            name:Currenuser.Biodetails.name,
-            Experience:Currenuser.Biodetails.Experience,
-            Education:Currenuser.Biodetails.Education,
-            Location:Currenuser.Biodetails.Location,
-            WorkPlace:Currenuser.Biodetails.WorkPlace,
-            skills:Currenuser.Biodetails.skills,
-            sociallinks:{
-                Instagram:Currenuser.Biodetails.sociallinks.Instagram,
-                Github:Currenuser.Biodetails.sociallinks.Github,
-                Linkedin:Currenuser.Biodetails.sociallinks.Linkedin
-            }
-        }
     }
     return user
     }catch(err){
