@@ -1,11 +1,12 @@
 "use client"
 import Image from "next/image";
-import profile from "@/components/icons/profile.svg"
+import profile from "@/components/icons/profile1.svg"
 import Link from "next/link";
 import { useState } from "react";
-import github from "@/components/icons/github.svg"
+import github from "@/components/icons/github2.svg"
 import instagram from "@/components/icons/instagram.svg"
 import linkedin from "@/components/icons/linkedin.svg"
+import { UpdateSocialLinks } from "@/components/Serveraction";
 
 
 
@@ -32,7 +33,6 @@ type prop={
 
 
 export default function Profile({isOwner,user}:prop) {
-   const [SocialLink,setSocialLinks]=useState(user?.Biodetails.sociallinks)
    const [showpopup,setshowpopup]=useState({
     Instagram:false,
     github:false,
@@ -48,12 +48,26 @@ export default function Profile({isOwner,user}:prop) {
     Location:user?.Biodetails.Location,
     Education:user?.Biodetails.Education,
     WorkPlace:user?.Biodetails.WorkPlace,
-    skills:user?.Biodetails.skills
+    skills:user?.Biodetails.skills,
+    Instagram:user?.Biodetails.sociallinks.Instagram,
+    Github:user?.Biodetails.sociallinks.Github,
+    Linkedin:user?.Biodetails.sociallinks.Linkedin,
    })
 
    function handlechange(e){
     const {name,value}=e.target
     setinfo({...info,[name]:value})
+   }
+
+   async function handlesubmitSocialLink(e){
+    e.preventDefault()
+    const {name}=e.target
+    try{
+     const res=await UpdateSocialLinks(info.Email,info.Instagram,info.Github,info.Linkedin)
+     setshowpopup(prev=>({...prev,[name]:false}))
+    }catch(err){
+      console.log(err)
+    }
    }
 
 
@@ -109,10 +123,6 @@ export default function Profile({isOwner,user}:prop) {
                 <p className="text-[#888]">Name</p>
                 <p className="text-white">{info.Name}</p>
               </div>}
-              <div className="ml-4 mt-2">
-                <p className="text-[#888]">Email</p>
-                <p className="text-white">{info.Email}</p>
-              </div>
               {info.Location && <div className="ml-4 mt-2">
                 <p className="text-[#888]">Location</p>
                 <p className="text-white">{info.Location}</p>
@@ -131,51 +141,55 @@ export default function Profile({isOwner,user}:prop) {
       {/* social links section */}
       <div className="mt-4 pl-15 pr-15">
         <div className=" border-2 rounded-2xl h-20 border-[#2e2e2e] flex flex-row items-center gap-4 pl-4">
-         <>
-    {SocialLink?.Instagram ? <Link className="mt-6 mb-4 text-white" href={SocialLink.Instagram}><Image src={instagram} alt="Instagram Link"></Image></Link> : <>
+          {isOwner ? <> <>
+    {user?.Biodetails.sociallinks.Instagram ? <Link className="mt-6 mb-4 text-white" href={user.Biodetails.sociallinks.Instagram}><Image src={instagram} alt="Instagram Link"></Image></Link> : <>
       <h1 className="mt-6 mb-4 text-white"  onClick={()=>setshowpopup(prev=>({...prev,Instagram:!prev.Instagram}))} >
        <Image src={instagram} alt="Instagram Link" ></Image>
         </h1>
         {showpopup.Instagram && <div className="popupdiv">
-              <form className="">
+              <form name="Instagram" onSubmit={handlesubmitSocialLink}>
                 <label>Instagram link:
-                  <input type="text"/>
-                  <button onClick={()=>setshowpopup(prev=>({...prev,Instagram:false}))}>save </button>
+                  <input type="text" name="Instagram" onChange={handlechange} value={info.Instagram} />
+                  <button type="submit">save </button>
                 </label>
                 </form></div>}
       </>
      }
     </>
          <>
-    {SocialLink?.Github ? <Link className="mt-6 mb-4 text-white" href={SocialLink.Github}><Image src={instagram} alt="Github Link"></Image></Link> : <>
+    {user?.Biodetails.sociallinks.Github ? <Link className="mt-6 mb-4 text-white" href={user.Biodetails.sociallinks.Github}><Image src={github} alt="Github Link"></Image></Link> : <>
       <h1 className="mt-6 mb-4 text-white" onClick={()=>setshowpopup(prev=>({...prev,github:!prev.github}))} >
        <Image src={github} alt="Github Link" ></Image>
         </h1>
         {showpopup.github && <div className="popupdiv">
-              <form className="">
+              <form name="github" onSubmit={handlesubmitSocialLink}>
                 <label>Github link:
-                  <input type="text" />
-                  <button  onClick={()=>setshowpopup(prev=>({...prev,github:false}))}>save </button>
+                  <input type="text" value={info.Github} name="Github" onChange={handlechange}  />
+                  <button  type="submit">save </button>
                 </label>
                 </form></div>}
       </>
      }
     </>
          <>
-    {SocialLink?.Linkedin ? <Link className="mt-6 mb-4 text-white" href={SocialLink.Linkedin}><Image src={linkedin} alt="Linkedin Link"></Image></Link> : <>
+    {user?.Biodetails.sociallinks.Linkedin ? <Link className="mt-6 mb-4 text-white" href={user.Biodetails.sociallinks.Linkedin}><Image src={linkedin} alt="Linkedin Link"></Image></Link> : <>
       <h1 className="mt-6 mb-4 text-white" onClick={()=>setshowpopup(prev=>({...prev,Linkedin:!prev.Linkedin}))} >
        <Image src={linkedin} alt="Linkedin Link" ></Image>
         </h1>
         {showpopup.Linkedin && <div className="popupdiv">
-              <form>
+              <form onSubmit={handlesubmitSocialLink}>
                 <label>Linkedin link:
-                  <input type="text" />
-                  <button  onClick={()=>setshowpopup(prev=>({...prev,Linkedin:false}))}>save</button>
+                  <input type="text" value={info.Linkedin} name="Linkedin" onChange={handlechange} />
+                  <button type="submit">save</button>
                 </label>
                 </form></div>}
       </>
      }
-    </>
+    </></>: <>
+      {info.Instagram && <Link className="mt-6 mb-4 text-white" href={info.Instagram}><Image src={instagram} alt="Instagram Link"></Image></Link>}
+      {info.Github && <Link className="mt-6 mb-4 text-white" href={info.Github}><Image src={instagram} alt="Github Link"></Image></Link>}
+      {info.Linkedin && <Link className="mt-6 mb-4 text-white" href={info.Linkedin}><Image src={linkedin} alt="Linkedin Link"></Image></Link>}
+    </>}
         </div>
       </div>
       {/* about section */}

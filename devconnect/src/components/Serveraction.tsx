@@ -77,4 +77,12 @@ export async function SigninfromGoogle(Email:data,name:data,Image:data){
     }
 }
 
+export async function UpdateSocialLinks(Email:string | undefined,Instagram:string | undefined,Github:string | undefined,Linkedin:string | undefined){
+    try{
+    const response=await axios.post("http://localhost:3000/api/dashboard/updateprofilelinks",{Email:Email,Instagram:Instagram,Github:Github,Linkedin:Linkedin})
+    return response.data
+    }catch(err){
+        console.log(err)
+    }
+}
 

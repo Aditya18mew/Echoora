@@ -29,3 +29,8 @@ export function BacktoHomebutton(){
 export function Spinnerinsidebutton(){
     return <div className="spinner"></div>
 }
+
+
+
+
+ 
