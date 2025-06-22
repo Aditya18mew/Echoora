@@ -6,7 +6,7 @@ import { useState } from "react";
 import github from "@/components/icons/github2.svg"
 import instagram from "@/components/icons/instagram.svg"
 import linkedin from "@/components/icons/linkedin.svg"
-import { UpdateSocialLinks } from "@/components/Serveraction";
+import { UpdateBioinfo, UpdateSocialLinks } from "@/components/Serveraction";
 
 
 
@@ -20,7 +20,8 @@ type prop={
       Experience:string,
       Education:string,
       Location:string,
-      WorkPlace:string
+      WorkPlace:string,
+      About:string
       skills:[],
       sociallinks:{
         Instagram:string,
@@ -38,7 +39,6 @@ export default function Profile({isOwner,user}:prop) {
     github:false,
     Linkedin:false
    })
-   const [Editabout,setEditabout]=useState(false)
 
    const [info,setinfo]=useState({
     username:user?.username,
@@ -48,6 +48,7 @@ export default function Profile({isOwner,user}:prop) {
     Location:user?.Biodetails.Location,
     Education:user?.Biodetails.Education,
     WorkPlace:user?.Biodetails.WorkPlace,
+    About:user?.Biodetails.About,
     skills:user?.Biodetails.skills,
     Instagram:user?.Biodetails.sociallinks.Instagram,
     Github:user?.Biodetails.sociallinks.Github,
@@ -65,6 +66,24 @@ export default function Profile({isOwner,user}:prop) {
     try{
      const res=await UpdateSocialLinks(info.Email,info.Instagram,info.Github,info.Linkedin)
      setshowpopup(prev=>({...prev,[name]:false}))
+    }catch(err){
+      console.log(err)
+    }
+   }
+   async function handlesubmitBio(e){
+    e.preventDefault()
+    try{
+     const res=await UpdateBioinfo({
+      Email:info.Email,
+      Name:info.Name,
+      Education:info.Education,
+      Experience:info.Experience,
+      Location:info.Location,
+      WorkPlace:info.WorkPlace,
+      About:info.About,
+      skills:info.skills
+    })
+     console.log(res)
     }catch(err){
       console.log(err)
     }
@@ -195,14 +214,9 @@ export default function Profile({isOwner,user}:prop) {
       {/* about section */}
       <div className="mt-4 pl-15 pr-15 mb-4">
         <div className=" border-2 rounded-2xl min-h-20 h-auto border-[#2e2e2e] flex flex-col  gap-4 pl-4">
-          <div className="flex flex-row justify-between m-2">
+          <div className="flex flex-col gap-2 m-2">
             <h1 className="text-white">About</h1>
-            <button onClick={()=>{setEditabout(true)}} className="text-white">Edit</button>
-          </div>
-          <div>
-           {Editabout ? <form>
-            <textarea name="about" id="about" className="Abouttextarea"></textarea>
-           </form> :  <p className="text-white">hello</p>}
+            {isOwner ? <div><textarea className="Abouttextarea w-full h-auto" value={info.About} onChange={handlechange} name="About"></textarea></div>:<p>{info.About}</p>} 
           </div>
         </div>
       </div>

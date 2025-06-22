@@ -225,8 +225,7 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) , 0 4px 10px rgba(0, 123, 255, 0.2);
 opacity: 0;
 }
 .Abouttextarea{
-   width: 300px;
-  height: 40px;
+  min-height: 40px;
   background-color:#1A1A1A;
   color: white;
     border: 1px solid grey;
@@ -240,6 +239,27 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) , 0 4px 10px rgba(0, 123, 255, 0.2);
 }
 .Abouttextarea:focus::placeholder{
 opacity: 0;
+}
+
+.sidebarlink{
+  width: 32px;
+  height: 32px;
+  background-color: white;
+  border-radius: 4px;
+  display:  flex;
+ align-items: center;
+ justify-content: center;
+}
+.activesidebarlink{
+  width: 28px;
+  height: 28px;
+  background-color: white;
+  border-radius: 4px;
+  display:  flex;
+ align-items: center;
+ justify-content: center;
+ border: var(--color-blue-400);
+ box-shadow: 0 0 10px #3b82f6;
 }
 
 

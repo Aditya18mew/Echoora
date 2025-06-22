@@ -86,3 +86,24 @@ export async function UpdateSocialLinks(Email:string | undefined,Instagram:strin
     }
 }
 
+type Bioinfo={
+    Email:string | undefined,
+    Name:string | undefined,
+    Experience:string | undefined,
+      Education:string | undefined,
+      Location:string | undefined,
+      WorkPlace:string | undefined,
+      About:string | undefined
+      skills:[] | undefined,
+}
+
+
+export async function UpdateBioinfo({Email,Name,Experience,Education,Location,WorkPlace,About,skills}:Bioinfo){
+    try{
+    const response=await axios.post("http://localhost:3000/api/dashboard/updateprofilelinks",{Email:Email})
+    return response.data
+    }catch(err){
+        console.log(err)
+    }
+}
+

@@ -29,6 +29,7 @@ import mongoose from "mongoose";
             Education:String,
             Location:String,
             WorkPlace:String,
+            About:String,
             skills:[],
             sociallinks:{
                 Instagram:String,
@@ -75,6 +76,7 @@ export async function Getuserbyusername(username:string){
             Education:getUser.Biodetails.Education,
             Location:getUser.Biodetails.Location,
             WorkPlace:getUser.Biodetails.WorkPlace,
+            About:getUser.Biodetails.About,
             skills:getUser.Biodetails.skills,
             sociallinks:{
                 Instagram:getUser.Biodetails.sociallinks.Instagram,
