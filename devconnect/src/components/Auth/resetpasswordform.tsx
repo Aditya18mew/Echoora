@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { validatepassword } from "../regex"
 import { ResetPasswordaction } from "../Serveraction"
 import { useRouter } from "next/navigation"
@@ -27,7 +27,7 @@ export  function ResetPasswordForm({Email}:{Email:string | undefined}){
  })
   const [isloading,setisloading]=useState(false)
 
- function handlechange(e){
+ function handlechange(e:React.ChangeEvent<HTMLInputElement>){
     const {name,value}=e.target
     seterror({
          newpass:{
@@ -42,7 +42,7 @@ export  function ResetPasswordForm({Email}:{Email:string | undefined}){
    setnewpassword({...newpassword,[name]:value})
  }
 
- async function handlesubmit(e){
+ async function handlesubmit(e:React.FormEvent<HTMLFormElement>){
     e.preventDefault()
     setisloading(true)
     const newerror={
@@ -81,8 +81,8 @@ export  function ResetPasswordForm({Email}:{Email:string | undefined}){
 return (
     <form onSubmit={handlesubmit} className="flex flex-col items-center self-center w-[350px] gap-1">
        <div className="flex flex-col mt-2 mb-2.5 items-center gap-5">
-         <input className={error.newpass.isError? "forminput forminput-error":"forminput forminput-noerror"} type="password" placeholder={error.newpass.isError? error.newpass.Errmessage:"new password"} name="newpass"  value={newpassword.newpass} onChange={handlechange}/>
-        <input className={error.confirmnewpass.isError? "forminput forminput-error":"forminput forminput-noerror"} type="password" placeholder={error.confirmnewpass.isError? error.confirmnewpass.Errmessage:"Confirm new password"} name="confirmnewpass" value={newpassword.confirmnewpass} onChange={handlechange} />
+         <input className={error.newpass.isError? "forminput forminput-error":"forminput forminput-noerror"} autoComplete="false" type="password" placeholder={error.newpass.isError? error.newpass.Errmessage:"new password"} name="newpass"  value={newpassword.newpass} onChange={handlechange}/>
+        <input className={error.confirmnewpass.isError? "forminput forminput-error":"forminput forminput-noerror"} type="password" autoComplete="false" placeholder={error.confirmnewpass.isError? error.confirmnewpass.Errmessage:"Confirm new password"} name="confirmnewpass" value={newpassword.confirmnewpass} onChange={handlechange} />
        </div>
        <div><button type="submit" className="formbutton">{isloading? <Spinnerinsidebutton></Spinnerinsidebutton>:"Continue"}</button></div>
     </form>

@@ -43,7 +43,7 @@ export default function Profile({isOwner,user}:prop) {
    const [info,setinfo]=useState({
     username:user?.username,
     Email:user?.Email,
-    Name:user?.Biodetails.name || "Aditya parmar",
+    Name:user?.Biodetails.name,
     Experience:user?.Biodetails.Experience,
     Location:user?.Biodetails.Location,
     Education:user?.Biodetails.Education,
@@ -66,6 +66,9 @@ export default function Profile({isOwner,user}:prop) {
     try{
      const res=await UpdateSocialLinks(info.Email,info.Instagram,info.Github,info.Linkedin)
      setshowpopup(prev=>({...prev,[name]:false}))
+     if(res.success){
+      /*  */
+     }
     }catch(err){
       console.log(err)
     }
@@ -83,7 +86,9 @@ export default function Profile({isOwner,user}:prop) {
       About:info.About,
       skills:info.skills
     })
-     console.log(res)
+   if(res) {
+    /*  */
+   }
     }catch(err){
       console.log(err)
     }
@@ -109,9 +114,10 @@ export default function Profile({isOwner,user}:prop) {
        </div>
        {/* user info section */}
         <div className="h-[400px] w-[800px] rounded-2xl border-[#2e2e2e] border-2">
-            <h3 className="text-lg font-semibold ml-4 mt-4 text-white">Bio and other details</h3>
-            {isOwner ? <form className="ml-4 mt-4 grid grid-cols-2 gap-x-4 gap-y-6">
-              <div className="ml-4 mt-2">
+              <h3 className="text-lg font-semibold ml-4 mt-4 text-white">Bio and other details</h3>
+            {isOwner ? <form onSubmit={handlesubmitBio} className="flex flex-col">
+             <div className="ml-4 mt-4 grid grid-cols-2 gap-x-4 gap-y-6">
+               <div className="ml-4 mt-2">
                 <p className="text-[#888]">Name</p>
                 <input type="text" className="profileforminput" value={info.Name} name="Name" onChange={handlechange} />
               </div>
@@ -135,6 +141,8 @@ export default function Profile({isOwner,user}:prop) {
                 <p className="text-[#888]">WorkPlace</p>
                 <input type="text" className="profileforminput" value={info.WorkPlace} onChange={handlechange} name="WorkPlace" />
               </div>
+             </div>
+              <button type="submit" className="profileformbutton self-end">save</button>
                 </form> 
                 : 
                 <div className="ml-4 mt-4 grid grid-cols-2 gap-x-4 gap-y-6">
@@ -206,7 +214,7 @@ export default function Profile({isOwner,user}:prop) {
      }
     </></>: <>
       {info.Instagram && <Link className="mt-6 mb-4 text-white" href={info.Instagram}><Image src={instagram} alt="Instagram Link"></Image></Link>}
-      {info.Github && <Link className="mt-6 mb-4 text-white" href={info.Github}><Image src={instagram} alt="Github Link"></Image></Link>}
+      {info.Github && <Link className="mt-6 mb-4 text-white" href={info.Github}><Image src={github} alt="Github Link"></Image></Link>}
       {info.Linkedin && <Link className="mt-6 mb-4 text-white" href={info.Linkedin}><Image src={linkedin} alt="Linkedin Link"></Image></Link>}
     </>}
         </div>
@@ -216,7 +224,8 @@ export default function Profile({isOwner,user}:prop) {
         <div className=" border-2 rounded-2xl min-h-20 h-auto border-[#2e2e2e] flex flex-col  gap-4 pl-4">
           <div className="flex flex-col gap-2 m-2">
             <h1 className="text-white">About</h1>
-            {isOwner ? <div><textarea className="Abouttextarea w-full h-auto" value={info.About} onChange={handlechange} name="About"></textarea></div>:<p>{info.About}</p>} 
+            {isOwner ? <div><textarea className="Abouttextarea w-full h-auto" value={info.About} onChange={handlechange} name="About"></textarea></div>:
+            <p className="text-white">{info.About}</p>} 
           </div>
         </div>
       </div>

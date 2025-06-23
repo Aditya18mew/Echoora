@@ -169,6 +169,26 @@ font-weight: 500;
   width: 500px;
   align-items: center;
 }
+.profileformbutton{
+    width: 60px;
+  height: 40px;
+  margin-right: 20px;
+  margin-top: 20px;
+  color: white;
+font-weight: 500;
+  background-color: #374151;
+    margin-left: 5px;
+    border-radius: 10px;
+}
+
+.profileformbutton:hover{
+  transform: scale(1.01);
+  opacity: 0.8;
+}
+.profileformbutton:active{
+  transform: scale(0.98);
+  opacity: 0.8;
+}
 
 .popupdiv{
        background-color:#1A1A1A;
@@ -217,6 +237,7 @@ font-weight: 500;
     border-radius: 10px;
     outline: none;
   }
+  
 
   .profileforminput:focus{
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) , 0 4px 10px rgba(0, 123, 255, 0.2);

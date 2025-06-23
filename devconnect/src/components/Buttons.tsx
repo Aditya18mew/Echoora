@@ -10,14 +10,14 @@ import { signIn} from "next-auth/react";
 
 
 export function GithubButton(){
-    return       <button className="extrabutton bg-slate-100 text-gray-700 shadow-sm"><Image src={github} alt="google" width={20} height={20}></Image>Github</button>
+    return       <button className="extrabutton bg-slate-100 text-gray-700 shadow-sm"><Image className="w-5 h-5" src={github} alt="google"></Image>Github</button>
 }
 
 export function GoogleButton(){
     async function handlesignin(){
      await signIn("google")
     }
-    return <button onClick={handlesignin} className="extrabutton bg-slate-100 text-gray-700 shadow-sm"><Image src={google} alt="google" width={20} height={20}></Image>Google</button>
+    return <button onClick={handlesignin} className="extrabutton bg-slate-100 text-gray-700 shadow-sm"><Image className="w-5 h-5" src={google} alt="google"></Image>Google</button>
 }
 
 

@@ -50,7 +50,7 @@ export function SigninForm(){
   
   
   
-   function handlechange(e){
+   function handlechange(e:React.ChangeEvent<HTMLInputElement>){
        const {name,value}=e.target
        seterrors(prev=>({...prev,[name]:{isError:false}}))
        setformData({...formData,[name]:value})
@@ -70,7 +70,7 @@ export function SigninForm(){
         }
       }
   
-  async function handlesubmit(e){
+  async function handlesubmit(e:React.FormEvent<HTMLFormElement>){
       e.preventDefault()
       setisloading(true)
        const newerror:Errors={
@@ -120,7 +120,7 @@ return (
     <form onSubmit={handlesubmit} className="flex flex-col items-center self-center w-[350px] gap-1">
       <div className="flex flex-col mt-2 mb-2.5 items-center gap-5">
         <input className={errors.Email.isError? "forminput forminput-error":"forminput forminput-noerror"} type="text" placeholder={errors.Email.isError? errors.Email.Errmessage:"Email"} name="Email"  value={formData.Email} onChange={handlechange}/>
-        <input className={errors.Password.isError? "forminput forminput-error":"forminput forminput-noerror"} type="password" placeholder={errors.Password.isError? errors.Password.Errmessage:"Password"} name="Password" value={formData.Password} onChange={handlechange} />
+        <input className={errors.Password.isError? "forminput forminput-error":"forminput forminput-noerror"} autoComplete="false" type="password" placeholder={errors.Password.isError? errors.Password.Errmessage:"Password"} name="Password" value={formData.Password} onChange={handlechange} />
       </div>
         <Link className="formlink" href="/forgetpassword">Forget password?</Link>
         <div><button type="submit" className="formbutton">{isloading? <Spinnerinsidebutton></Spinnerinsidebutton>:"Continue"}</button></div>

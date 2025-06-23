@@ -38,12 +38,12 @@ export function ForgetpasswordForm(){
   })
   const [isloading,setisloading]=useState(false)
  
-  function handlechange(e){
+  function handlechange(e:React.ChangeEvent<HTMLInputElement>){
     const {value}=e.target
     seterror(prev=>({...prev,isError:false}))
     setemail(value)
   }
-  async function handlesubmit(e){
+  async function handlesubmit(e:React.FormEvent<HTMLFormElement>){
      e.preventDefault()
       setisloading(true)
      const newerror:Error={

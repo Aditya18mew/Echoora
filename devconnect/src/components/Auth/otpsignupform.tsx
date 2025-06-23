@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { validateotp } from "../regex"
 import { useRouter } from "next/navigation"
 import { VerifyEmailaction } from "@/components/Serveraction"
@@ -38,7 +38,7 @@ export function OtpForm({Email}:{Email:string | undefined}){
  })
    const [isloading,setisloading]=useState(false)
 
- function handlechange(e){
+ function handlechange(e:React.ChangeEvent<HTMLInputElement>){
    const {value}=e.target
    seterror({
     isError:false,
@@ -47,7 +47,7 @@ export function OtpForm({Email}:{Email:string | undefined}){
    setotp(value)
  }
 
- async function handlesubmit(e){
+ async function handlesubmit(e:React.FormEvent<HTMLFormElement>){
     e.preventDefault()
      setisloading(true)
     const newerror={
@@ -70,7 +70,7 @@ export function OtpForm({Email}:{Email:string | undefined}){
     setisloading(false)
     }
     if(res.success){
-      router.push("/sign-up/verifyemail/submitdetails") 
+      router.push("/dashboard") 
     }
     }catch(err){
         console.log(err)

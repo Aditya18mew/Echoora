@@ -100,7 +100,7 @@ type Bioinfo={
 
 export async function UpdateBioinfo({Email,Name,Experience,Education,Location,WorkPlace,About,skills}:Bioinfo){
     try{
-    const response=await axios.post("http://localhost:3000/api/dashboard/updateprofilelinks",{Email:Email})
+    const response=await axios.post("http://localhost:3000/api/dashboard/updateprofilebio",{Email:Email,Name:Name,Experience:Experience,Education:Education,Location:Location,WorkPlace:WorkPlace,About:About,skills:skills})
     return response.data
     }catch(err){
         console.log(err)
