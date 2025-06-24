@@ -1,5 +1,5 @@
 "use client"
-import "../../globals.css"
+import "../globals.css"
 import profile from "@/components/icons/profile.svg"
 import home from "@/components/icons/home.svg"
 import setting from "@/components/icons/settings.svg"

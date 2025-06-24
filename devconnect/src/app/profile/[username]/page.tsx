@@ -1,5 +1,5 @@
 import { cookies } from "next/headers"
-import "../../../globals.css"
+import "../../globals.css"
 import Profile from "../profile"
 import { Sidebar } from "../sidebar"
 import { VerifyToken } from "@/components/Auth/jwttokens"
@@ -21,7 +21,6 @@ export  default async function ProfilePage({
   const AccessToken=cookiestore.get("AccessToken")?.value
    let isowner:boolean=false
    let user;
-   let success;
 
   if(AccessToken){
     try{
