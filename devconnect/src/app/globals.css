@@ -316,6 +316,29 @@ opacity: 0;
   display: none;
 }
 
+.postinput{
+  width: 85%;
+  height: 40px;
+  background-color: #293043;
+    border: 1px solid grey;
+    padding: 4px;
+    font-size: 1rem;
+    border-radius: 10px;
+    outline: none;
+  }
+
+  .dashboardnavbarinput{
+    background-color: #101f2d;
+    border-color: var(--color-gray-600);
+    padding-inline: 16px;
+    padding-block: 4px;
+    border-radius: var(--radius-2xl);
+     font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+     border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+
 
 
 

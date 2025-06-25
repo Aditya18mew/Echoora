@@ -7,13 +7,27 @@ import Image from "next/image"
 
 export  default async function Dashboard(){
 
+return <div className="feed">
+      <div className="bg-[#152433] rounded-2xl mb-5 p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
+          
+           <div className="flex flex-col gap-2 justify-between items-start">
+        <div className="flex gap-4 w-full items-center">
+          <Image
+            src={profile}
+            className="w-14 h-14 rounded-full object-cover"
+            alt="profile img"
+          />
+          <input type="text" className="postinput" placeholder="whats happenning" />
+        </div>
+          <div className="flex gap-3 ml-18">
+          <button className="w-24 border h-10 rounded-2xl border-gray-500 bg-[#101f2d]">Photo</button>
+          <button className="w-24 border h-10 rounded-2xl border-gray-500 bg-[#101f2d]">Video</button>
+        </div>
+      </div>
 
-  
- 
-
-    return <div className="feed">
+      </div>
       {data.map((post)=>{
-        return  <div key={post.id} className="bg-[#1A1A2E] rounded-2xl mb-5 p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
+        return  <div key={post.id} className="bg-[#152433] rounded-2xl mb-5 p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
           
            <div className="flex justify-between items-start">
         <div className="flex gap-4">
@@ -53,6 +67,5 @@ export  default async function Dashboard(){
 
       </div>
       })}
-      
     </div>
 }

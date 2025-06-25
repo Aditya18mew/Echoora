@@ -1,3 +1,4 @@
+import { Navbar } from "./navbar"
 
 
 
@@ -12,9 +13,7 @@ export default function Dashboardlayout({
 }){
  return (
     <div className="flex flex-col bg-[#1a1d21] min-h-screen">
-       <div className="w-full h-16 text-start pl-4 py-5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xl shadow-md">
-                dev Connect
-            </div>
+         <Navbar></Navbar>
         <div className="flex text-white flex-1">
          <aside className="hidden lg:basis-[25%] lg:flex lg:flex-col p-3">{left}</aside>
         <div className="w-full lg:basis-[50%] pt-3">{children}</div>

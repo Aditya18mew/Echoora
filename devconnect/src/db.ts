@@ -36,7 +36,8 @@ import mongoose from "mongoose";
                 Github:String,
                 Linkedin:String
             }
-        }
+        },
+        posts:[]
         })
 
 
