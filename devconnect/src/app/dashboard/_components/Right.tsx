@@ -1,7 +1,8 @@
 
 
 
-export default function rightdashboard(){
+
+export  function Rightdashboard(){
     return (
         <>
         <div className="flex flex-col bg-[#152433] rounded-2xl m-2">

@@ -22,6 +22,8 @@ try {
        Toverifyuser.Biodetails.sociallinks.Instagram=""
        Toverifyuser.Biodetails.sociallinks.Github=""
        Toverifyuser.Biodetails.sociallinks.Linkedin=""
+       Toverifyuser.followers.count=0
+       Toverifyuser.following.count=0
        await Toverifyuser.save()
        const isProd=process.env.NODE_ENV==="production"
     const response= NextResponse.json({success:true})

@@ -1,11 +1,11 @@
 "use client"
 import Image from "next/image";
-import profile from "@/components/icons/profile1.svg"
 import Link from "next/link";
 import { useState } from "react";
 import github from "@/components/icons/github2.svg"
 import instagram from "@/components/icons/instagram.svg"
 import linkedin from "@/components/icons/linkedin.svg"
+import defaultuser from "@/components/icons/defaultuser.svg"
 import { UpdateBioinfo, UpdateSocialLinks } from "@/components/Serveraction";
 
 
@@ -18,6 +18,7 @@ type prop={
     Biodetails:{
       name:string,
       Experience:string,
+      Image:string,
       Education:string,
       Location:string,
       WorkPlace:string,
@@ -28,6 +29,14 @@ type prop={
         Github:string,
         Linkedin:string
       }
+    },
+    followers:{
+      count:number,
+      Arr:[]
+    },
+    following:{
+      count:number,
+      Arr:[]
     }
   } | undefined
 }
@@ -43,6 +52,7 @@ export default function Profile({isOwner,user}:prop) {
    const [info,setinfo]=useState({
     username:user?.username,
     Email:user?.Email,
+    profileimg:user?.Biodetails.Image,
     Name:user?.Biodetails.name,
     Experience:user?.Biodetails.Experience,
     Location:user?.Biodetails.Location,
@@ -53,6 +63,8 @@ export default function Profile({isOwner,user}:prop) {
     Instagram:user?.Biodetails.sociallinks.Instagram,
     Github:user?.Biodetails.sociallinks.Github,
     Linkedin:user?.Biodetails.sociallinks.Linkedin,
+    followercount:user?.followers.count || 0,
+    followingcount:user?.following.count || 0
    })
 
    function handlechange(e){
@@ -105,11 +117,11 @@ export default function Profile({isOwner,user}:prop) {
       {/* user profile section */}
       <div className="flex flex-row h-[450px] pl-15 pr-15 gap-10">
        <div className="flex flex-col h-[400px] items-center w-[500px]  border-2 rounded-2xl border-[#2e2e2e] pb-4">
-                <Image src={profile} alt="Profile image" className="w-65 h-65 rounded-full mt-4"></Image>
+                <Image src={info.profileimg || defaultuser} alt="Profile image" className="w-50 h-50 rounded-full mt-10"></Image>
           <h2 className="mt-6 mb-4 text-white">{info.username}</h2>
           <div className="flex gap-2">
-            <Link href="#" className="text-[#777777] text-[15px]">followers:100</Link>
-            <Link href="#" className="text-[#777777] text-[15px]">following:432</Link>
+            <Link href="#" className="text-[#777777] text-[15px] flex gap-1">followers:<span>{info.followercount}</span></Link>
+            <Link href="#" className="text-[#777777] text-[15px] flex gap-1">following:<span>{info.followingcount}</span></Link>
           </div> 
        </div>
        {/* user info section */}
@@ -231,5 +243,5 @@ export default function Profile({isOwner,user}:prop) {
       </div>
      </div>
 
-  )
+  ) 
 }

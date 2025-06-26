@@ -1,71 +1,45 @@
-import { data } from "@/components/fakedata"
-import profile from "@/components/icons/profile1.svg"
-import Image from "next/image"
+import { cookies } from "next/headers"
+import Feed from "./_components/feed"
+import { Navbar } from "./_components/navbar"
+import { Rightdashboard } from "./_components/Right"
+import { Getdata } from "@/components/Auth/jwttokens"
+import { notFound } from "next/navigation"
+import { MiniProfile } from "./_components/miniprofile"
+import { Card } from "./_components/card"
+
+
+
+
+
+
 
 
 
 
 export  default async function Dashboard(){
+  const cookiestore=await cookies()
+const AccessToken=cookiestore.get("AccessToken")?.value
+let userdata;
 
-return <div className="feed">
-      <div className="bg-[#152433] rounded-2xl mb-5 p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-          
-           <div className="flex flex-col gap-2 justify-between items-start">
-        <div className="flex gap-4 w-full items-center">
-          <Image
-            src={profile}
-            className="w-14 h-14 rounded-full object-cover"
-            alt="profile img"
-          />
-          <input type="text" className="postinput" placeholder="whats happenning" />
-        </div>
-          <div className="flex gap-3 ml-18">
-          <button className="w-24 border h-10 rounded-2xl border-gray-500 bg-[#101f2d]">Photo</button>
-          <button className="w-24 border h-10 rounded-2xl border-gray-500 bg-[#101f2d]">Video</button>
-        </div>
-      </div>
+if(AccessToken){
+    const user=await Getdata(AccessToken)
 
-      </div>
-      {data.map((post)=>{
-        return  <div key={post.id} className="bg-[#152433] rounded-2xl mb-5 p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-          
-           <div className="flex justify-between items-start">
-        <div className="flex gap-4">
-          <Image
-            src={profile}
-            className="w-14 h-14 rounded-full object-cover"
-            alt="profile img"
-          />
-          <div className="flex flex-col">
-            <div className="flex gap-2 items-center text-white">
-              <h1 className="font-semibold">Aditya Parmar</h1>
-              <span className="text-sm text-gray-400">@parmar332</span>
-            </div>
-            <p className="text-xs text-gray-500">{new Date().toLocaleString()}</p>
-          </div>
-        </div>
-        <button className="text-gray-400 hover:text-white px-2">⋯</button>
-      </div>
-       <h2 className="text-lg text-white font-medium mt-4 ml-2">{post.title}</h2>
+    if(!user?.success){
+     notFound()
+    }
+    userdata=user.data
+}
 
-      <p className="text-gray-300 mt-2 ml-2">{post.body}</p>
 
-      <div className="mt-3 ml-2 text-sm text-gray-500">👀 {post.views} views</div>
-           <div className="flex gap-4 justify-between mt-4 px-2">
-        <button className="flex items-center gap-1 px-4 py-2 rounded-lg bg-[#293043] text-white hover:bg-[#39475f] transition">
-          ❤ Like
-          <span className="text-sm text-gray-300">{post.reactions.likes}</span>
-        </button>
-        <button className="flex items-center gap-1 px-4 py-2 rounded-lg bg-[#293043] text-white hover:bg-[#39475f] transition">
-          💬 Comment
-          <span className="text-sm text-gray-300">{post.reactions.dislikes}</span>
-        </button>
-        <button className="flex items-center gap-1 px-4 py-2 rounded-lg bg-[#293043] text-white hover:bg-[#39475f] transition">
-          🔄 Share
-        </button>
-      </div>
-
-      </div>
-      })}
+return    <div className="flex flex-col bg-[#1a1d21] min-h-screen">
+         <Navbar Name={userdata?.name} image={userdata?.Image}></Navbar>
+        <div className="flex text-white flex-1">
+         <aside className="hidden lg:basis-[25%] lg:flex lg:flex-col p-3"> 
+                 <MiniProfile Name={userdata?.name} image={userdata?.Image} followercount={userdata?.followers.count} followingcount={userdata?.following.count} username={userdata?.username}></MiniProfile>
+                 <Card peoples={userdata?.followers.Arr}></Card>
+                 </aside>
+        <div className="w-full lg:basis-[50%] pt-3"><Feed></Feed></div>
+         <aside className="hidden lg:basis-[25%] lg:block p-3 "><Rightdashboard></Rightdashboard></aside>
+        </div> 
     </div>
 }

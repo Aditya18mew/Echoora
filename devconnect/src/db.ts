@@ -1,3 +1,4 @@
+import { profile } from "console";
 import mongoose from "mongoose";
 
 
@@ -25,6 +26,7 @@ import mongoose from "mongoose";
         },
         Biodetails:{
             name:String,
+            Image:String,
             Experience:String,
             Education:String,
             Location:String,
@@ -36,6 +38,25 @@ import mongoose from "mongoose";
                 Github:String,
                 Linkedin:String
             }
+        },
+        followers:{
+            count:Number,
+            Arr:[{
+                username:String,
+                profileimg:String,
+                followedAt:Date,
+                name:String,
+                isFollowedBack:Boolean
+            }]
+        },
+        following:{
+            count:Number,
+            Arr:[{
+                username:String,
+                profileimg:String,
+                followedAt:Date,
+                name:String
+            }]
         },
         posts:[]
         })
@@ -73,6 +94,7 @@ export async function Getuserbyusername(username:string){
      username:getUser.Authdetails.username,
      Biodetails:{
             name:getUser.Biodetails.name,
+            Image:getUser.Biodetails.Image,
             Experience:getUser.Biodetails.Experience,
             Education:getUser.Biodetails.Education,
             Location:getUser.Biodetails.Location,
@@ -84,7 +106,16 @@ export async function Getuserbyusername(username:string){
                 Github:getUser.Biodetails.sociallinks.Github,
                 Linkedin:getUser.Biodetails.sociallinks.Linkedin
             }
-        }
+        },
+        followers:{
+            count:getUser.followers.count,
+            Arr:getUser.followers.Arr
+        },
+        following:{
+            count:getUser.following.count,
+            Arr:getUser.following.Arr
+        },
+        posts:getUser.posts
     }
     return {success:true,user:user}
     }catch(err){
@@ -95,4 +126,31 @@ export async function Getuserbyusername(username:string){
 
 
 
+export async function getdatabyEmail(Email:string){
+    try{
+        const getUser=await User.findOne({"Authdetails.Email":Email})
+        if(!getUser){
+            return {success:false}
+        }
+       const data={
+     username:getUser.Authdetails.username,
+     name:getUser.Biodetails.name,
+     Image:getUser.Biodetails.Image,
+      About:getUser.Biodetails.About,
+        followers:{
+            count:getUser.followers.count,
+            Arr:getUser.followers.Arr
+        },
+        following:{
+            count:getUser.following.count,
+            Arr:getUser.following.Arr
+        },
+        posts:getUser.posts
+    }
+    return {success:true,data:data}
+    }catch(err){
+        console.log(err)
+    }
+
+}
 
