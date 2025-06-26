@@ -42,4 +42,5 @@ next-env.d.ts
 
 #fake posts
 /src/components/fakedata.ts
+/src/app/api/dashboard
 

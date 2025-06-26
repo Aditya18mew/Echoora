@@ -7,6 +7,7 @@ import instagram from "@/components/icons/instagram.svg"
 import linkedin from "@/components/icons/linkedin.svg"
 import defaultuser from "@/components/icons/defaultuser.svg"
 import { UpdateBioinfo, UpdateSocialLinks } from "@/components/Serveraction";
+import axios from "axios";
 
 
 
@@ -106,6 +107,17 @@ export default function Profile({isOwner,user}:prop) {
     }
    }
 
+   async function follow(){
+    try{
+     const res=await axios.post("http://localhost:3000/api/dashboard/follow",{Email:info.Email})
+     console.log(res.data)
+    }catch(err){
+      console.log(err)
+    }
+   }
+
+
+
 
   return (
     <div className="w-full bg-[#1A1A1A] border-2 border-[#2e2e2e]">
@@ -123,6 +135,7 @@ export default function Profile({isOwner,user}:prop) {
             <Link href="#" className="text-[#777777] text-[15px] flex gap-1">followers:<span>{info.followercount}</span></Link>
             <Link href="#" className="text-[#777777] text-[15px] flex gap-1">following:<span>{info.followingcount}</span></Link>
           </div> 
+          {!isOwner && <button onClick={follow} className="button w-[120px] mt-2.5 mb-2.5">follow</button>}
        </div>
        {/* user info section */}
         <div className="h-[400px] w-[800px] rounded-2xl border-[#2e2e2e] border-2">
@@ -154,7 +167,7 @@ export default function Profile({isOwner,user}:prop) {
                 <input type="text" className="profileforminput" value={info.WorkPlace} onChange={handlechange} name="WorkPlace" />
               </div>
              </div>
-              <button type="submit" className="profileformbutton self-end">save</button>
+              <button type="submit" className="button mr-5 mt-5 w-20 self-end">save</button>
                 </form> 
                 : 
                 <div className="ml-4 mt-4 grid grid-cols-2 gap-x-4 gap-y-6">

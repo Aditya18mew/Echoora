@@ -32,7 +32,7 @@ if(AccessToken){
 
 
 return    <div className="flex flex-col bg-[#1a1d21] min-h-screen">
-         <Navbar Name={userdata?.name} image={userdata?.Image}></Navbar>
+         <Navbar Name={userdata?.name} image={userdata?.Image} username={userdata?.username}></Navbar>
         <div className="flex text-white flex-1">
          <aside className="hidden lg:basis-[25%] lg:flex lg:flex-col p-3"> 
                  <MiniProfile Name={userdata?.name} image={userdata?.Image} followercount={userdata?.followers.count} followingcount={userdata?.following.count} username={userdata?.username}></MiniProfile>
