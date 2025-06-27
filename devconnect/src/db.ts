@@ -1,6 +1,15 @@
-import { profile } from "console";
+
 import mongoose from "mongoose";
 
+type follower={
+    username:string,
+    profileimg:string,
+    followedAt:Date,
+    name:string,
+    isFollowedBack:boolean
+            }
+
+            
 
 
         const UserSchema=new mongoose.Schema({
@@ -83,12 +92,14 @@ export async function FindOne(Email:string){
     }
 }
 
-export async function Getuserbyusername(username:string){
+export async function Getuserbyusername(username:string,curruser:string){
     try{
-        const getUser=await User.findOne({"Authdetails.username":username})
+        const getUser=await User.findOne({"Authdetails.username":username})/* .lean<Userlean>() */
         if(!getUser){
             return {success:false}
         }
+        const isFollowed=getUser.followers.Arr.some((follower:follower)=>follower.username===curruser) 
+
        const user={
      Email:getUser.Authdetails.Email,
      username:getUser.Authdetails.username,
@@ -107,15 +118,13 @@ export async function Getuserbyusername(username:string){
                 Linkedin:getUser.Biodetails.sociallinks.Linkedin
             }
         },
+        isFollowed:isFollowed,
         followers:{
             count:getUser.followers.count,
-            Arr:getUser.followers.Arr
         },
         following:{
             count:getUser.following.count,
-            Arr:getUser.following.Arr
         },
-        posts:getUser.posts
     }
     return {success:true,user:user}
     }catch(err){
@@ -132,6 +141,7 @@ export async function getdatabyEmail(Email:string){
         if(!getUser){
             return {success:false}
         }
+
        const data={
      username:getUser.Authdetails.username,
      name:getUser.Biodetails.name,
@@ -152,5 +162,4 @@ export async function getdatabyEmail(Email:string){
         console.log(err)
     }
 
-}
-
+} 

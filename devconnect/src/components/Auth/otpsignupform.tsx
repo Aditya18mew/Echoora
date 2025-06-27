@@ -12,10 +12,8 @@ import { Spinnerinsidebutton } from "../Buttons"
 
 type ApiResponse={
   success:true,
-  data:{
-    AccessToken:string,
-    RefreshToken:string
-  } } | {
+  username:string
+} | {
    success:false,
   Error:{
     isError:boolean,
@@ -70,7 +68,7 @@ export function OtpForm({Email}:{Email:string | undefined}){
     setisloading(false)
     }
     if(res.success){
-      router.push("/dashboard") 
+      router.push(`/profile/${res.username}`) 
     }
     }catch(err){
         console.log(err)

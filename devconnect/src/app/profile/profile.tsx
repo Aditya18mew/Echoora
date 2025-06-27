@@ -31,13 +31,12 @@ type prop={
         Linkedin:string
       }
     },
+    isFollowed:boolean
     followers:{
       count:number,
-      Arr:[]
     },
     following:{
       count:number,
-      Arr:[]
     }
   } | undefined
 }
@@ -65,7 +64,8 @@ export default function Profile({isOwner,user}:prop) {
     Github:user?.Biodetails.sociallinks.Github,
     Linkedin:user?.Biodetails.sociallinks.Linkedin,
     followercount:user?.followers.count || 0,
-    followingcount:user?.following.count || 0
+    followingcount:user?.following.count || 0,
+    isFollowed:user?.isFollowed
    })
 
    function handlechange(e){
@@ -109,7 +109,7 @@ export default function Profile({isOwner,user}:prop) {
 
    async function follow(){
     try{
-     const res=await axios.post("http://localhost:3000/api/dashboard/follow",{Email:info.Email})
+     const res=await axios.post("http://localhost:3000/api/dashboard/follow",{Email:info.Email,isFollowed:info.isFollowed})
      console.log(res.data)
     }catch(err){
       console.log(err)
@@ -135,7 +135,7 @@ export default function Profile({isOwner,user}:prop) {
             <Link href="#" className="text-[#777777] text-[15px] flex gap-1">followers:<span>{info.followercount}</span></Link>
             <Link href="#" className="text-[#777777] text-[15px] flex gap-1">following:<span>{info.followingcount}</span></Link>
           </div> 
-          {!isOwner && <button onClick={follow} className="button w-[120px] mt-2.5 mb-2.5">follow</button>}
+          {!isOwner && <button onClick={follow} className="button w-[120px] mt-2.5 mb-2.5">{info.isFollowed ? "following":"follow"}</button>}
        </div>
        {/* user info section */}
         <div className="h-[400px] w-[800px] rounded-2xl border-[#2e2e2e] border-2">

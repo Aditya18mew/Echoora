@@ -23,7 +23,6 @@ let userdata;
 
 if(AccessToken){
     const user=await Getdata(AccessToken)
-
     if(!user?.success){
      notFound()
     }

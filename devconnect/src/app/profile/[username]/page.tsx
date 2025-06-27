@@ -25,7 +25,7 @@ export  default async function ProfilePage({
   if(AccessToken){
     try{
     const currentuser=await VerifyToken(AccessToken)
-    const getuser=await Getuserbyusername(username)
+    const getuser=await Getuserbyusername(username,currentuser?.username)
     if(!getuser?.success){
       return <div className="flex">
   <Sidebar></Sidebar>

@@ -3,7 +3,6 @@
 import { ComparePassword } from "@/components/Auth/bcrypt";
 import { validatemail,validatepassword } from "@/components/regex";
 import { connectdb } from "@/db";
-import { read } from "fs";
 import { NextResponse } from "next/server";
 
 type ComparePasswordResponse=
@@ -59,7 +58,7 @@ export async function POST(req:Request){
           if(response.what==="Error") return NextResponse.json({success:false,Error:response})
         
      }else{
-       return NextResponse.json({success:false,error:{Password:{iSError:true,Errmessage:"Enter a valid Email"}}})
+       return NextResponse.json({success:false,error:{Password:{iSError:true,Errmessage:"Enter a valid password"}}})
      }
    }else{
       return NextResponse.json({success:false,error:{Email:{iSError:true,Errmessage:"Enter a valid Email"}}})

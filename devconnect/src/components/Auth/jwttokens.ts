@@ -1,6 +1,5 @@
 
-
-import { FindOne, getdatabyEmail } from "@/db"
+import { connectdb, FindOne, getdatabyEmail } from "@/db"
 import jwt from "jsonwebtoken"
 
 
@@ -120,7 +119,20 @@ export async function VerifyRefreshToken(RefreshToken:string){
     }
 }
 
+export async function VerifyAccessToken(AccessToken:string){
+        try{
+        if(typeof ACCESS_TOKEN_SECRET!=="string"){
+    throw new Error("Access token must be defined")
+  }
+   const {Email}=jwt.verify(AccessToken,ACCESS_TOKEN_SECRET)
+    return Email
+    }catch(err){
+      console.log(err)
+    }
+}
+
 export async function Getdata(AccessToken:string){
+  await connectdb()
     try{
         if(typeof ACCESS_TOKEN_SECRET!=="string"){
     throw new Error("Access token must be defined")
@@ -132,4 +144,3 @@ export async function Getdata(AccessToken:string){
   console.log(err)
 }
 }
-

@@ -26,7 +26,7 @@ try {
        Toverifyuser.following.count=0
        await Toverifyuser.save()
        const isProd=process.env.NODE_ENV==="production"
-    const response= NextResponse.json({success:true})
+    const response= NextResponse.json({success:true,username:Toverifyuser.Authdetails.username})
      response.cookies.set(`AccessToken`,AccessToken,{
             httpOnly:true,
             secure:isProd,
