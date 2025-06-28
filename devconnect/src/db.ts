@@ -2,13 +2,19 @@
 import mongoose from "mongoose";
 
 type follower={
-    username:string,
-    profileimg:string,
-    followedAt:Date,
-    name:string,
-    isFollowedBack:boolean
+        username:string,
+        profileimg:string,
+        followedAt:number,
+        name:string,
+        isFollowedBack:boolean
             }
 
+type following={
+        username:string,
+        profileimg:string,
+        followedAt:number,
+        name:string,
+            }
             
 
 
@@ -133,6 +139,41 @@ export async function Getuserbyusername(username:string,curruser:string){
 
 }
 
+export async function Followuser(username:string,email:string){
+    /* username of whom you want to follow and email of your */
+    try{
+      const self=await User.findOne({"Authdetails.Email":email})
+      const followerdetails:follower={
+    username:self.Authdetails.username,
+    profileimg:"",
+    followedAt:Date.now(),
+    name:self.Biodetails.name,
+    isFollowedBack:false
+  }
+      const Tofollow=await User.findOneAndUpdate({"Authdetails.username":username},{$push:{"followers.Arr":followerdetails},$inc:{"followers.count":1}},{new:true})
+      const followingdetails:following={
+     username:Tofollow.Authdetails.username,
+    profileimg:"",
+    followedAt:Date.now(),
+    name:Tofollow.Biodetails.name,
+   }   
+    await User.updateOne({"Authdetails.Email":email},{$push:{"following.Arr":followingdetails},$inc:{"following.count":1}})
+    return {success:true}
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export async function unFollowuser(username:string,email:string){
+    try{
+   const self=  await User.findOneAndUpdate({"Authdetails.Email":email},{$pull:{"following.Arr":{username:username}},$inc:{"following.count":-1}},{new:true})
+   const selfusername=self.Authdetails.username
+     await User.updateOne({"Authdetails.username":username},{$pull:{"followers.Arr":{username:selfusername}},$inc:{"followers.count":-1}})
+     return {success:true}
+    }catch(err){
+        console.log(err)
+    }
+}
 
 
 export async function getdatabyEmail(Email:string){

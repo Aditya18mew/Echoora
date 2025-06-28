@@ -19,6 +19,8 @@ export function Card({peoples}:{peoples:peoples}){
     A:0,
     B:3
    })
+   /* i cannot call a Arr from a mongoose document like that so i need to find a workaround */
+ /*   const [list,setlist]=useState([...peoples].sort((a,b)=>b.followedAt.getTime()-a.followedAt.getTime())) */
 
    function increase(){
     setTwonumber({A:twonumber.A+3,B:twonumber.B+3})

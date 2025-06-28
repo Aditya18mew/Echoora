@@ -109,8 +109,15 @@ export default function Profile({isOwner,user}:prop) {
 
    async function follow(){
     try{
-     const res=await axios.post("http://localhost:3000/api/dashboard/follow",{Email:info.Email,isFollowed:info.isFollowed})
-     console.log(res.data)
+     const res=await axios.post("http://localhost:3000/api/dashboard/follow",{username:info.username,isFollowed:info.isFollowed})
+    if(res.data.success){
+      if(res.data.task==='unfollowed'){
+         setinfo({...info,isFollowed:false,followercount:info.followercount-1})
+      }
+      if(res.data.task==="followed"){
+        setinfo({...info,isFollowed:true,followercount:info.followercount+1})
+      }
+    }
     }catch(err){
       console.log(err)
     }
