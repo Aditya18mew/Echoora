@@ -22,8 +22,6 @@ const AccessToken=cookiestore.get("AccessToken")?.value || ""
     return NextResponse.json({success:true,task:"followed"})
   }
  
-
-
 }
 
 

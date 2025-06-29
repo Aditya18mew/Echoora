@@ -15,6 +15,50 @@ type following={
         followedAt:number,
         name:string,
             }
+
+
+  interface User{
+    Authdetails:{
+        Email:string,
+        username:string,
+        Password:string,
+        Otp:string,
+        RefreshToken:string,
+        RefreshtokencreateDate:Date,
+        RefreshtokenexpiryDate:Date,
+        googleAuthDetails:{
+            ProviderId:string,
+            name:string,
+            Image:string,
+        }
+        },
+        Biodetails:{
+            name:string,
+            Image:string,
+            Experience:string,
+            Education:string,
+            Location:string,
+            WorkPlace:string,
+            About:string,
+            skills:[],
+            sociallinks:{
+                Instagram:string,
+                Github:string,
+                Linkedin:string
+            }
+        },
+        followers:{
+            count:number,
+            Arr:follower[]
+        },
+        following:{
+            count:number,
+            Arr:following[]
+        },
+        posts:[]
+  }
+
+        
             
 
 
@@ -139,16 +183,19 @@ export async function Getuserbyusername(username:string,curruser:string){
 
 }
 
+
+
 export async function Followuser(username:string,email:string){
     /* username of whom you want to follow and email of your */
     try{
       const self=await User.findOne({"Authdetails.Email":email})
+      const isFollowed:boolean=self.followers.Arr.some((follower:follower)=>follower.username===username) 
       const followerdetails:follower={
     username:self.Authdetails.username,
     profileimg:"",
     followedAt:Date.now(),
     name:self.Biodetails.name,
-    isFollowedBack:false
+    isFollowedBack:isFollowed
   }
       const Tofollow=await User.findOneAndUpdate({"Authdetails.username":username},{$push:{"followers.Arr":followerdetails},$inc:{"followers.count":1}},{new:true})
       const followingdetails:following={
@@ -156,7 +203,8 @@ export async function Followuser(username:string,email:string){
     profileimg:"",
     followedAt:Date.now(),
     name:Tofollow.Biodetails.name,
-   }   
+   } 
+    if(isFollowed)  await User.updateOne({"Authdetails.Email":email,"followers.Arr.username":username},{$set:{"followers.Arr.$.isFollowedBack":true}})  
     await User.updateOne({"Authdetails.Email":email},{$push:{"following.Arr":followingdetails},$inc:{"following.count":1}})
     return {success:true}
     }catch(err){
@@ -168,6 +216,8 @@ export async function unFollowuser(username:string,email:string){
     try{
    const self=  await User.findOneAndUpdate({"Authdetails.Email":email},{$pull:{"following.Arr":{username:username}},$inc:{"following.count":-1}},{new:true})
    const selfusername=self.Authdetails.username
+   const isFollowed:boolean=self.followers.Arr.some((follower:follower)=>follower.username===username) 
+   if(isFollowed)  await User.updateOne({"Authdetails.Email":email,"followers.Arr.username":username},{$set:{"followers.Arr.$.isFollowedBack":false}})
      await User.updateOne({"Authdetails.username":username},{$pull:{"followers.Arr":{username:selfusername}},$inc:{"followers.count":-1}})
      return {success:true}
     }catch(err){
@@ -178,10 +228,23 @@ export async function unFollowuser(username:string,email:string){
 
 export async function getdatabyEmail(Email:string){
     try{
-        const getUser=await User.findOne({"Authdetails.Email":Email})
+        const getUser=await User.findOne({"Authdetails.Email":Email}).lean<User>()
         if(!getUser){
             return {success:false}
         }
+
+        /* it is a nice work-around but will need different option way to do this */
+    const convertedfollowerarr:follower[]= getUser.followers.Arr.map((item)=>({  username:item.username,
+                profileimg:item.profileimg,
+                followedAt:item.followedAt,
+                name:item.name,
+                isFollowedBack:item.isFollowedBack}))
+   
+    const convertedfollowingarr:following[]= getUser.following.Arr.map((item)=>({  username:item.username,
+                profileimg:item.profileimg,
+                followedAt:item.followedAt,
+                name:item.name}))
+   
 
        const data={
      username:getUser.Authdetails.username,
@@ -190,11 +253,11 @@ export async function getdatabyEmail(Email:string){
       About:getUser.Biodetails.About,
         followers:{
             count:getUser.followers.count,
-            Arr:getUser.followers.Arr
+            Arr:convertedfollowerarr
         },
         following:{
             count:getUser.following.count,
-            Arr:getUser.following.Arr
+            Arr:convertedfollowingarr
         },
         posts:getUser.posts
     }
@@ -204,3 +267,5 @@ export async function getdatabyEmail(Email:string){
     }
 
 } 
+
+
