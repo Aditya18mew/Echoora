@@ -31,16 +31,8 @@ export  async function GET(req:NextRequest){
             Email:Currentuser.Authdetails.Email
           },ACCESS_TOKEN_SECRET,{expiresIn:"15m"})
 
-            const isProd=process.env.NODE_ENV==="production"
      const response=NextResponse.json({success:true,AccessToken:AccessToken})
 
-   /*    response.cookies.set(`AccessToken`,AccessToken,{
-            httpOnly:true,
-            secure:isProd,
-            sameSite:"strict",
-            maxAge:60*15,
-            path:"/"
-           }) */
  return response
  
    }catch(err){

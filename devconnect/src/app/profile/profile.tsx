@@ -8,6 +8,8 @@ import linkedin from "@/components/icons/linkedin.svg"
 import defaultuser from "@/components/icons/defaultuser.svg"
 import { UpdateBioinfo, UpdateSocialLinks } from "@/components/Serveraction";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+
 
 
 
@@ -43,6 +45,7 @@ type prop={
 
 
 export default function Profile({isOwner,user}:prop) {
+  const router=useRouter()
    const [showpopup,setshowpopup]=useState({
     Instagram:false,
     github:false,
@@ -124,85 +127,131 @@ export default function Profile({isOwner,user}:prop) {
    }
 
 
+   async function StartChat(){
+    try{
+    const res=await axios.post("http://localhost:3000/api/dashboard/chat",{username:info.username})
+     if(res.data.success){
+      router.push("/dashboard/chat")
+     }
+    }catch(err){
+      console.log(err)
+    }
+   }
 
 
-  return (
-    <div className="w-full bg-[#1A1A1A] border-2 border-[#2e2e2e]">
-     <div className=" pl-15 pr-15 mt-4">
-      <h1 className="text-white text-3xl mb-1">Profile</h1>
-      <p className="text-[#777777] text-xs mt-0.5">view your all profile details here</p>
-      <div className="border-t-2 border-dashed border-[#444] mt-2 mb-4"></div>
+
+
+  return  <div className="w-full bg-[#1A1A1A] border-2 border-[#2e2e2e] p-6">
+         <div className="mb-6">
+    <div className="flex flex-row justify-between">
+       <div>
+      <h1 className="text-white text-3xl">Profile</h1>
+    <p className="text-[#777777] text-xs mt-1">View your profile details here</p>
      </div>
-      {/* user profile section */}
-      <div className="flex flex-row h-[450px] pl-15 pr-15 gap-10">
-       <div className="flex flex-col h-[400px] items-center w-[500px]  border-2 rounded-2xl border-[#2e2e2e] pb-4">
-                <Image src={info.profileimg || defaultuser} alt="Profile image" className="w-50 h-50 rounded-full mt-10"></Image>
-          <h2 className="mt-6 mb-4 text-white">{info.username}</h2>
-          <div className="flex gap-2">
-            <Link href="#" className="text-[#777777] text-[15px] flex gap-1">followers:<span>{info.followercount}</span></Link>
-            <Link href="#" className="text-[#777777] text-[15px] flex gap-1">following:<span>{info.followingcount}</span></Link>
-          </div> 
-          {!isOwner && <button onClick={follow} className="button w-[120px] mt-2.5 mb-2.5">{info.isFollowed ? "following":"follow"}</button>}
-       </div>
-       {/* user info section */}
-        <div className="h-[400px] w-[800px] rounded-2xl border-[#2e2e2e] border-2">
-              <h3 className="text-lg font-semibold ml-4 mt-4 text-white">Bio and other details</h3>
-            {isOwner ? <form onSubmit={handlesubmitBio} className="flex flex-col">
-             <div className="ml-4 mt-4 grid grid-cols-2 gap-x-4 gap-y-6">
-               <div className="ml-4 mt-2">
+     <div>
+       <button onClick={StartChat} className="hover:bg-[#c5cad1] flex items-center justify-center rounded-lg w-auto h-8 bg-white  cursor-pointer transition">
+            <span className="text-gray-700 hidden md:block m-2">Direct Message</span>
+            <span className="text-gray-700 md:hidden m-2">DM</span>
+    </button>
+     </div>
+    </div>
+    <div className="border-t-2 border-dashed border-[#444] mt-3"></div>
+  </div>
+   <div className="flex flex-col lg:flex-row gap-6">
+    {/* Profile Card */}
+    <div className="flex flex-col items-center border-2 border-[#2e2e2e] rounded-2xl w-full lg:w-[400px] py-6">
+      <Image
+        src={info.profileimg || defaultuser}
+        alt="Profile image"
+        className="w-32 h-32 rounded-full"
+      />
+      <h2 className="mt-4 text-white text-xl font-semibold">{info.username}</h2>
+      <div className="flex gap-4 mt-2 text-sm text-[#777777]">
+        <Link href="#">Followers: <span>{info.followercount}</span></Link>
+        <Link href="#">Following: <span>{info.followingcount}</span></Link>
+      </div>
+      {!isOwner && (
+        <button
+          onClick={follow}
+          className="button mt-4 px-4 py-1 rounded bg-white text-black hover:bg-gray-200"
+        >
+          {info.isFollowed ? "Following" : "Follow"}
+        </button>
+      )}
+    </div>
+
+    {/* Bio & Details */}
+    <div className="w-full border-2 border-[#2e2e2e] rounded-2xl p-4">
+      <h3 className="text-lg font-semibold text-white mb-4">Bio and Other Details</h3>
+      {isOwner ? (
+        <form onSubmit={handlesubmitBio} className="flex flex-col">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
                 <p className="text-[#888]">Name</p>
                 <input type="text" className="profileforminput" value={info.Name} name="Name" onChange={handlechange} />
               </div>
-              <div className="ml-4 mt-2">
+              <div>
                 <p className="text-[#888]">Email</p>
                 <p className="text-white">{info.Email}</p>
               </div>
-              <div className="ml-4 mt-2">
+              <div>
                 <p className="text-[#888]">location</p>
                 <input type="text" className="profileforminput" value={info.Location} name="Location" onChange={handlechange} />
               </div>
-              <div className="ml-4 mt-2">
+              <div>
                 <p className="text-[#888]">Education</p>
                 <input type="text" className="profileforminput" value={info.Education} onChange={handlechange} name="Education" />
               </div>
-              <div className="ml-4 mt-2">
+              <div>
                 <p className="text-[#888]">Experience</p>
                 <input type="text" className="profileforminput" value={info.Experience} name="Experience" onChange={handlechange} />
               </div>
-              <div className="ml-4 mt-2">
+              <div>
                 <p className="text-[#888]">WorkPlace</p>
                 <input type="text" className="profileforminput" value={info.WorkPlace} onChange={handlechange} name="WorkPlace" />
               </div>
-             </div>
-              <button type="submit" className="button mr-5 mt-5 w-20 self-end">save</button>
-                </form> 
-                : 
-                <div className="ml-4 mt-4 grid grid-cols-2 gap-x-4 gap-y-6">
-              {info.Name && <div className="ml-4 mt-2">
-                <p className="text-[#888]">Name</p>
-                <p className="text-white">{info.Name}</p>
-              </div>}
-              {info.Location && <div className="ml-4 mt-2">
-                <p className="text-[#888]">Location</p>
-                <p className="text-white">{info.Location}</p>
-              </div>}
-              {info.Education && <div className="ml-4 mt-2">
-                <p className="text-[#888]">Education</p>
-                <p className="text-white">{info.Education}</p>
-              </div>}
-             {info.Experience &&  <div className="ml-4 mt-2">
-                <p className="text-[#888]">Experience</p>
-                <p className="text-white">{info.Experience}</p>
-              </div>}
-            </div> }
-          </div> 
-      </div>
-      {/* social links section */}
-      <div className="mt-4 pl-15 pr-15">
-        <div className=" border-2 rounded-2xl h-20 border-[#2e2e2e] flex flex-row items-center gap-4 pl-4">
+          </div>
+              
+            <button type="submit" className="button w-24 mt-4 ml-auto">
+            Save
+          </button>
+
+        </form>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {info.Name && (
+            <div>
+              <p className="text-[#888]">Name</p>
+              <p className="text-white">{info.Name}</p>
+            </div>
+          )}
+          {info.Location && (
+            <div>
+              <p className="text-[#888]">Location</p>
+              <p className="text-white">{info.Location}</p>
+            </div>
+          )}
+          {info.Education && (
+            <div>
+              <p className="text-[#888]">Education</p>
+              <p className="text-white">{info.Education}</p>
+            </div>
+          )}
+          {info.Experience && (
+            <div>
+              <p className="text-[#888]">Experience</p>
+              <p className="text-white">{info.Experience}</p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  </div>
+   <div className="mt-6">
+        <div className="border-2 border-[#2e2e2e] rounded-2xl flex items-center gap-6">
           {isOwner ? <> <>
-    {user?.Biodetails.sociallinks.Instagram ? <Link className="mt-6 mb-4 text-white" href={user.Biodetails.sociallinks.Instagram}><Image src={instagram} alt="Instagram Link"></Image></Link> : <>
-      <h1 className="mt-6 mb-4 text-white"  onClick={()=>setshowpopup(prev=>({...prev,Instagram:!prev.Instagram}))} >
+    {user?.Biodetails.sociallinks.Instagram ? <Link className="mt-2 mb-2 text-white" href={user.Biodetails.sociallinks.Instagram}><Image src={instagram} alt="Instagram Link"></Image></Link> : <>
+      <h1 className="mt-2 mb-2 text-white"  onClick={()=>setshowpopup(prev=>({...prev,Instagram:!prev.Instagram}))} >
        <Image src={instagram} alt="Instagram Link" ></Image>
         </h1>
         {showpopup.Instagram && <div className="popupdiv">
@@ -216,8 +265,8 @@ export default function Profile({isOwner,user}:prop) {
      }
     </>
          <>
-    {user?.Biodetails.sociallinks.Github ? <Link className="mt-6 mb-4 text-white" href={user.Biodetails.sociallinks.Github}><Image src={github} alt="Github Link"></Image></Link> : <>
-      <h1 className="mt-6 mb-4 text-white" onClick={()=>setshowpopup(prev=>({...prev,github:!prev.github}))} >
+    {user?.Biodetails.sociallinks.Github ? <Link className="mt-2 mb-2 text-white" href={user.Biodetails.sociallinks.Github}><Image src={github} alt="Github Link"></Image></Link> : <>
+      <h1 className="mt-2 mb-2 text-white" onClick={()=>setshowpopup(prev=>({...prev,github:!prev.github}))} >
        <Image src={github} alt="Github Link" ></Image>
         </h1>
         {showpopup.github && <div className="popupdiv">
@@ -231,8 +280,8 @@ export default function Profile({isOwner,user}:prop) {
      }
     </>
          <>
-    {user?.Biodetails.sociallinks.Linkedin ? <Link className="mt-6 mb-4 text-white" href={user.Biodetails.sociallinks.Linkedin}><Image src={linkedin} alt="Linkedin Link"></Image></Link> : <>
-      <h1 className="mt-6 mb-4 text-white" onClick={()=>setshowpopup(prev=>({...prev,Linkedin:!prev.Linkedin}))} >
+    {user?.Biodetails.sociallinks.Linkedin ? <Link className="mt-2 mb-2 text-white" href={user.Biodetails.sociallinks.Linkedin}><Image src={linkedin} alt="Linkedin Link"></Image></Link> : <>
+      <h1 className="mt-2 mb-2 text-white" onClick={()=>setshowpopup(prev=>({...prev,Linkedin:!prev.Linkedin}))} >
        <Image src={linkedin} alt="Linkedin Link" ></Image>
         </h1>
         {showpopup.Linkedin && <div className="popupdiv">
@@ -251,17 +300,22 @@ export default function Profile({isOwner,user}:prop) {
     </>}
         </div>
       </div>
-      {/* about section */}
-      <div className="mt-4 pl-15 pr-15 mb-4">
-        <div className=" border-2 rounded-2xl min-h-20 h-auto border-[#2e2e2e] flex flex-col  gap-4 pl-4">
-          <div className="flex flex-col gap-2 m-2">
-            <h1 className="text-white">About</h1>
-            {isOwner ? <div><textarea className="Abouttextarea w-full h-auto" value={info.About} onChange={handlechange} name="About"></textarea></div>:
-            <p className="text-white">{info.About}</p>} 
-          </div>
-        </div>
-      </div>
-     </div>
 
-  ) 
+
+ <div className="mt-6">
+    <div className="border-2 border-[#2e2e2e] rounded-2xl p-4">
+      <h1 className="text-white text-lg mb-2">About</h1>
+      {isOwner ? (
+        <textarea
+          className="Abouttextarea w-full min-h-[200px]"
+          value={info.About}
+          onChange={handlechange}
+          name="About"
+        />
+      ) : (
+        <p className="text-white">{info.About}</p>
+      )}
+    </div>
+    </div>
+</div>
 }

@@ -20,9 +20,9 @@ export function Navbar({Name,username,image}:data){
     className=" w-84 lg:w-96 dashboardnavbarinput placeholder:text-gray-400"
   />
   <div className="flex items-center gap-4">
-    <div className="hover:bg-[#727881] flex items-center justify-center rounded-full w-8 h-8 bg-white  cursor-pointer transition">
+    <Link href="/dashboard/chat" className="hover:bg-[#727881] flex items-center justify-center rounded-full w-8 h-8 bg-white  cursor-pointer transition">
      <Image src={message} alt="message" className="w-6 h-6"></Image>
-    </div>
+    </Link>
     <div className="hover:bg-[#727881] flex items-center justify-center rounded-full w-8 h-8 bg-white cursor-pointer transition">
       <Image src={notification} alt="notification" className="w-6 h-6"></Image>
     </div>

@@ -1,6 +1,10 @@
 
 import mongoose from "mongoose";
 
+
+/* const DatabaseURL=process.env.DATABASE_BASE_URL */
+
+
 type follower={
         username:string,
         profileimg:string,
@@ -121,7 +125,26 @@ type following={
         })
 
 
+        const ChatSchema=new mongoose.Schema({
+            participants:[{ 
+                userId:{type:mongoose.Schema.Types.ObjectId,ref:"User",required:true}
+            }],
+            content:String,
+            upDatedAt:{type:Date,default:Date.now()}
+        })
+
+        const MessageSchema= new mongoose.Schema({
+            chatID:{type:mongoose.Schema.Types.ObjectId,ref:"Chat"},
+            sender:{
+                username:String,
+                content:String,
+                createdAt:{type:Date,default:Date.now()}
+            }
+        })
+
  export const User=mongoose.models.User || mongoose.model("User",UserSchema)
+ export const Chat=mongoose.models.Chat || mongoose.model("Chat",ChatSchema)
+ export const Message=mongoose.models.Message || mongoose.model("Message",MessageSchema)
 
 
 export async function connectdb(){
@@ -137,6 +160,30 @@ export async function FindOne(Email:string){
     try{
         const Currentuser=await User.findOne({"Authdetails.Email":Email})
         return Currentuser
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export async function StartChat(Email:string,username:string){
+     try{
+       const self=await User.findOne({"Authdetails.Email":Email})
+       const user=await User.findOne({"Authdetails.username":username})
+       let willchat=await Chat.findOne({$and:[{"participants.userId":{$all:[self._id,user._id]}},{"participants":{$size:2}}]})
+       if(!willchat){
+           willchat= await Chat.create({"participants":[{userId:self._id},{userId:user._id}]})
+       }
+        return willchat
+     }catch(err){
+         console.log(err)
+     }
+}
+
+export async function FetchChat(Email:string){
+    try{
+        const self=await User.findOne({"Authdetails.Email":Email})
+      const findchats=await Chat.find({"participants.userId":self._id}).lean()
+      return findchats
     }catch(err){
         console.log(err)
     }
