@@ -124,10 +124,11 @@ type following={
         posts:[]
         })
 
-
-        const ChatSchema=new mongoose.Schema({
+         const ChatSchema=new mongoose.Schema({
             participants:[{ 
-                userId:{type:mongoose.Schema.Types.ObjectId,ref:"User",required:true}
+                username:{type:String,required:true},
+                Name:String,
+                profileimg:String
             }],
             content:String,
             upDatedAt:{type:Date,default:Date.now()}
@@ -169,9 +170,16 @@ export async function StartChat(Email:string,username:string){
      try{
        const self=await User.findOne({"Authdetails.Email":Email})
        const user=await User.findOne({"Authdetails.username":username})
-       let willchat=await Chat.findOne({$and:[{"participants.userId":{$all:[self._id,user._id]}},{"participants":{$size:2}}]})
+       let willchat=await Chat.findOne({$and:[{"participants.username":{$all:[self.Authdetails.username,username]}},{"participants":{$size:2}}]})
        if(!willchat){
-           willchat= await Chat.create({"participants":[{userId:self._id},{userId:user._id}]})
+           willchat= await Chat.create({"participants":[{
+            username:self.Authdetails.username,
+            Name:self.Biodetails.name,
+            profileimg:self.Biodetails.Image },
+            {username:username,
+             Name:user.Biodetails.name,
+             profileimg:user.Biodetails.Image   
+            }]})
        }
         return willchat
      }catch(err){
@@ -182,12 +190,14 @@ export async function StartChat(Email:string,username:string){
 export async function FetchChat(Email:string){
     try{
         const self=await User.findOne({"Authdetails.Email":Email})
-      const findchats=await Chat.find({"participants.userId":self._id}).lean()
-      return findchats
+      const findchats=await Chat.find({"participants.username":self.Authdetails.username}).lean()
+ return JSON.parse(JSON.stringify(findchats))
     }catch(err){
         console.log(err)
     }
 }
+
+
 
 export async function Getuserbyusername(username:string,curruser:string){
     try{
