@@ -1,0 +1,37 @@
+
+import mongoose from "mongoose";
+
+
+
+  const ChatSchema=new mongoose.Schema({
+            participants:[{ 
+                username:{type:String,required:true},
+                Name:String,
+                profileimg:String
+            }],
+            content:String,
+            upDatedAt:{type:Date,default:Date.now()}
+        })
+
+        const MessageSchema= new mongoose.Schema({
+            chatID:{type:mongoose.Schema.Types.ObjectId,ref:"Chat"},
+            sender:{
+                username:String,
+                content:String,
+                createdAt:{type:Date,default:Date.now()}
+            }
+        })
+
+
+ export const Chat=mongoose.models.Chat || mongoose.model("Chat",ChatSchema)
+ export const Message=mongoose.models.Message || mongoose.model("Message",MessageSchema)
+
+
+export async function connectdb(){
+try{
+    await mongoose.connect("mongodb://localhost:27017/devConnect")
+}catch(err){
+    console.log(err)
+    process.exit(1)
+}
+}
