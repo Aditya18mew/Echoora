@@ -30,13 +30,14 @@ io.on("connection",async (socket)=>{
 
   socket.on("join-chat",async ({selfusername,username}:{selfusername:string,username:string})=>{
       let willchat=await Chat.findOne({$and:[{"participants.username":{$all:[selfusername,username]}},{"participants":{$size:2}}]})
+      console.log("joined")
     socket.join(willchat._id)
   })
 
   socket.on("send-message",async ({selfusername,username,message}:sendmesagedata)=>{
      let willchat=await Chat.findOne({$and:[{"participants.username":{$all:[selfusername,username]}},{"participants":{$size:2}}]})
      console.log(message)
-    io.to(willchat._id).emit("recieve_message",{message})
+    io.to(willchat._id).emit("receive-message",{message:message})
   })
 
   socket.on("disconnect",()=>{

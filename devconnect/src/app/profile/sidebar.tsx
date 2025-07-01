@@ -12,12 +12,16 @@ import { useState } from "react"
 
 
 
+
 export function Sidebar(){
    const [activelink,setactivelink]=useState({
       Home:false,
       profile:true,
       setting:false
    })
+
+
+
  return (
     <aside className="w-18 bg-[#121212] shadow-md  flex flex-col items-center justify-between min-h-screen">
       <div className="h-40 w-12 flex flex-col gap-2 items-center mt-6">
