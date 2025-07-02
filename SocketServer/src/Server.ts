@@ -4,6 +4,7 @@ import http from "http"
 import cors from "cors"
 import { Server } from "socket.io"
 import { Chat,Message, connectdb } from "./mongoosedb"
+import { Client } from "socket.io/dist/client"
 
 type sendmesagedata={
     selfusername:string,
@@ -29,16 +30,16 @@ io.on("connection",async (socket)=>{
 
 
   socket.on("join-chat",async ({selfusername,username}:{selfusername:string,username:string})=>{
-      let willchat=await Chat.findOne({$and:[{"participants.username":{$all:[selfusername,username]}},{"participants":{$size:2}}]})
-      console.log("joined")
-    socket.join(willchat._id)
+      const willchat=await Chat.findOne({$and:[{"participants.username":{$all:[selfusername,username]}},{"participants":{$size:2}}]})
+      const roomId=willchat._id.toString()
+    socket.join(roomId)
   })
 
   socket.on("send-message",async ({selfusername,username,message}:sendmesagedata)=>{
-     let willchat=await Chat.findOne({$and:[{"participants.username":{$all:[selfusername,username]}},{"participants":{$size:2}}]})
-     console.log(message)
-    io.to(willchat._id).emit("receive-message",{message:message})
-  })
+     const willchat=await Chat.findOne({$and:[{"participants.username":{$all:[selfusername,username]}},{"participants":{$size:2}}]})
+     const roomId=willchat._id.toString()
+    io.to(roomId).except(socket.id).emit("receive-message",message)
+  }) 
 
   socket.on("disconnect",()=>{
     console.log("disconnected")

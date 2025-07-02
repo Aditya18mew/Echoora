@@ -15,18 +15,26 @@ type user={
   upDatedAt:string,
   _id:string
 }
+type message={
+ sender:string,
+      message:string,
+      time:string
+}
 
 
 export function Chat({user}:{user:user}){
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<message[]>([]);
   const [newMsg, setNewMsg] = useState("");
   const hasdone=useRef(false)
+
 
 
   function handleChange(e:React.ChangeEvent<HTMLInputElement>){
    const {value}=e.target
    setNewMsg(value)
   }
+
+
 
   useEffect(()=>{
      async function fetchmessage(selfusername:string,username:string){
@@ -47,27 +55,32 @@ export function Chat({user}:{user:user}){
      socket.emit("join-chat",{selfusername:user.selfusername,username:user.anotheruser.username})
    }
    hasdone.current=true
-   
-       socket.on("receive-message",(data)=>{
-    console.log("hello")
-    console.log(data)
-    setMessages(prev=>[...prev,data])
+        socket.on("receive-message",(data)=>{
+      setMessages(prev=>([...prev,data]))
    })
-    
    return ()=>{
     socket.off("receive-message")
    }
   },[user.selfusername,user.anotheruser.username])
 
+ 
 
 
   function sendmessage(){
     socket.emit("send-message",{
     selfusername:user.selfusername,
     username:user.anotheruser.username,
-    message:newMsg
+    message:{
+      sender:user.selfusername,
+      message:newMsg,
+      time:Date.now().toLocaleString()
+    }
     })
-     setMessages(prev=>[...prev,newMsg])
+     setMessages(prev=>[...prev,{
+      sender:user.selfusername,
+      message:newMsg,
+      time:Date.now().toLocaleString()
+    }])
      setNewMsg("")
   }
 
@@ -79,11 +92,21 @@ return  <div className="flex-1 flex flex-col bg-[#1a1d21]">
 
         {/* Messages */}
         <div className="flex-1 flex justify-center overflow-y-auto p-4 space-y-3 text-white">
-           <div>
-           {messages.map((mess)=>{
-           return <h1 key={mess}>{mess}</h1>
-           })}
-          </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          {messages.map((msg) => (
+            <div
+              key={msg.message}
+              className={`max-w-xs px-4 py-2 rounded-lg ${
+                msg.sender === user.selfusername
+                  ? "bg-purple-400 text-white self-end ml-auto"
+                  : "bg-purple-400 text-white self-start mr-auto"
+              }`}
+            >
+              {msg.message}
+            </div>
+          ))}
+        </div>
+
         </div>
 
         {/* Input */}
