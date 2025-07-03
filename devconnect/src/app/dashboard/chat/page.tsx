@@ -1,7 +1,7 @@
-import { cookies } from "next/headers";
-import { ChatArea } from "./chatarea";
+import { cookies } from "next/headers"
 import { VerifyAccessToken } from "@/components/Auth/jwttokens";
 import { connectdb, FetchChat } from "@/db";
+import { ChatSidebar } from "./chatSidebar";
 
 type user={
     participants:{username:string,Name:string,profileimg:string}[]
@@ -41,6 +41,6 @@ export default async function ChatPage() {
 
 
   return (
-    <ChatArea fetchChats={fetchChats} selfusername={selfuser}></ChatArea>
+    <ChatSidebar fetchChats={fetchChats} selfusername={selfuser}></ChatSidebar>
   );
 }

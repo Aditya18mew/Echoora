@@ -9,15 +9,15 @@ import mongoose from "mongoose";
                 Name:String,
                 profileimg:String
             }],
-            content:String,
+            latestcontent:String,
             upDatedAt:{type:Date,default:Date.now()}
         })
 
-        const MessageSchema= new mongoose.Schema({
-            chatID:{type:mongoose.Schema.Types.ObjectId,ref:"Chat"},
+       const MessageSchema= new mongoose.Schema({
+            ChatId:{type:mongoose.Schema.Types.ObjectId,ref:"Chat"},
             sender:{
                 username:String,
-                content:String,
+                message:String,
                 createdAt:{type:Date,default:Date.now()}
             }
         })

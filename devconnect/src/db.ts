@@ -135,10 +135,10 @@ type following={
         })
 
         const MessageSchema= new mongoose.Schema({
-            chatId:{type:mongoose.Schema.Types.ObjectId,ref:"Chat"},
+            ChatId:{type:mongoose.Schema.Types.ObjectId,ref:"Chat"},
             sender:{
                 username:String,
-                content:String,
+                message:String,
                 createdAt:{type:Date,default:Date.now()}
             }
         })
@@ -201,7 +201,7 @@ export async function FetchChat(Email:string){
 export async function Fetchmessage(selfusername:string,username:string){
       try {
      const willchat=await Chat.findOne({$and:[{"participants.username":{$all:[selfusername,username]}},{"participants":{$size:2}}]})
-       const Messages=await Message.find({"chatId":willchat._id})
+       const Messages=await Message.find({"ChatId":willchat._id})
        return JSON.parse(JSON.stringify(Messages))
       } catch (error) {
         console.log(error)

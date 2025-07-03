@@ -298,6 +298,10 @@ opacity: 0;
   display: none;
 }
 
+.messages::-webkit-scrollbar{
+  display: none;
+}
+
 .postinput{
   width: 85%;
   height: 40px;
