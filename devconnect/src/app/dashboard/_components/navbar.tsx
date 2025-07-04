@@ -1,9 +1,12 @@
-
+"use client"
 import Image from "next/image"
 import defaultuser from "@/components/icons/defaultuser.svg"
 import message from "@/components/icons/message.svg"
 import notification from "@/components/icons/notification.svg"
 import Link from "next/link"
+import React, { useCallback, useEffect, useState } from "react"
+
+
 
 type data={
   Name:string | undefined,
@@ -11,14 +14,81 @@ type data={
   image:string | undefined
 }
 
+type searchuser={
+  Authdetails:{
+    username:string
+  },
+  Biodetails:{
+    name:string
+  },
+  _id:object
+} 
+
 export function Navbar({Name,username,image}:data){
-    return     <div className="w-full flex items-center justify-between h-16 px-6 bg-[#1a1d21] text-white shadow-md">
+  const [isSearching,setisSearching]=useState(false)
+  const [query,setquery]=useState<string>("")
+  const [Error,setError]=useState({
+    isError:false,
+    Errmessage:"error try again"
+  })
+  const [results,setresults]=useState<searchuser[]>([])
+
+  const debounce=UseDebounce(query,500)
+
+   const fetchsearch=useCallback(async (search:string)=>{
+    if(search.trim()===""){
+      setresults([])
+      return
+    }
+         try{
+        const res=await fetch("http://localhost:3000/api/dashboard/search",{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({search:search})
+        })
+        if(!res.ok){
+           setError(prev=>({...prev,isError:true}))
+        }
+        const {Arr}=await res.json()
+        setresults(Arr)
+        setisSearching(true)
+         }catch(err){
+          setError(prev=>({...prev,isError:true}))
+          console.log(err)
+         }
+   },[])
+
+
+
+  function handleChange(e:React.ChangeEvent<HTMLInputElement>){
+    if(e.target.value===""){
+       setisSearching(false)
+    }
+     setquery(e.target.value)
+  }
+
+  useEffect(()=>{
+    if(debounce){
+      fetchsearch(debounce)
+    }
+  },[debounce,fetchsearch])
+
+
+
+    return   <>
+     <div className="w-full flex items-center justify-between h-16 px-6 bg-transparent text-white shadow-md relative">
   <h1 className="hidden text-xl font-bold tracking-wide md:block">DevConnect</h1>
-  <input
+   <input
     type="text"
-    placeholder="Search..."
-    className=" w-84 lg:w-96 dashboardnavbarinput placeholder:text-gray-400"
+    placeholder={Error.isError ? Error.Errmessage : "Search..."}
+    name="Search"
+    value={query}
+    onChange={handleChange}
+    className=" w-84 lg:w-96 dashboardnavbarinput sticky  placeholder:text-gray-400"
   />
+
   <div className="flex items-center gap-4">
     <Link href="/dashboard/chat" className="hover:bg-[#727881] flex items-center justify-center rounded-full w-8 h-8 bg-white  cursor-pointer transition">
      <Image src={message} alt="message" className="w-6 h-6"></Image>
@@ -32,4 +102,29 @@ export function Navbar({Name,username,image}:data){
     </Link>
     </div>
 </div>
+ { isSearching && results.length &&  <div className="w-full md:w-148   md:p-0 flex px-3  self-start md:self-center h-auto z-10  text-white">
+ <ul className="w-full bg-[#1a1d21] px-2 py-2 rounded-lg">
+    {results.map((user:searchuser)=>{
+      return <li key={user.Authdetails.username}>{user.Biodetails.name}</li>
+    })}
+ </ul>
+  </div>} 
+    </>
+}
+
+
+
+
+function UseDebounce(Search:string,delay:number){
+  const [debounce,setdebounce]=useState<string>()
+
+  useEffect(()=>{
+   const timer=setTimeout(()=>{
+     setdebounce(Search)
+   },delay)
+
+   return ()=>clearTimeout(timer)
+  },[Search,delay])
+
+return debounce
 }

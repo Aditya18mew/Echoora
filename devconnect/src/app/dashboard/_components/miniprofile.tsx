@@ -65,12 +65,12 @@ export  function MiniProfile({Name,image,username,followingcount,followercount,p
 
     return <>
     {/* mini profile */}
-    <div className="flex flex-col items-center bg-[#152433] rounded-2xl m-2">
+    <div className="flex flex-col items-center bg-[#1e1e1e] border-1 border-[#333333] rounded-2xl m-2">
         <div className="imagecontainer">
              <Image src={backgroundimg} alt="background image" className="w-full h-24 rounded-t-2xl"></Image>
         <Image src={image || defaultuser} className="ogimage" alt="profile img"></Image>
         </div>
-        <div className="flex flex-col items-center gap-0.5"><h1>{Name}</h1>
+        <div className="flex flex-col items-center text-[#e0e0e0] gap-0.5"><h1>{Name}</h1>
              <p className="font-extralight text-gray-300">@{username}</p>
               <p>hello i am king of ichenon</p>
         </div>
@@ -86,7 +86,7 @@ export  function MiniProfile({Name,image,username,followingcount,followercount,p
         </div>    
     </div>
     {/* suggested user list */}
-      <div className="flex flex-col bg-[#152433] p-2 rounded-2xl m-2">
+      <div className="flex flex-col bg-[#1e1e1e] border-1 border-[#333333] p-2 rounded-2xl m-2">
         <h1 className="text-lg m-1">Who is to follow you</h1>
         <div className="flex flex-col gap-2">{list?.slice(twonumber.A,twonumber.B).map((person)=>{
             return <div className="flex justify-evenly items-center mt-1" key={person.username}>

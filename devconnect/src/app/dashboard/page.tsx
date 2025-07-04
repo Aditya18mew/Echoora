@@ -5,7 +5,6 @@ import { Rightdashboard } from "./_components/Right"
 import { Getdata } from "@/components/Auth/jwttokens"
 import { notFound } from "next/navigation"
 import { MiniProfile } from "./_components/miniprofile"
-/* import { Card } from "./_components/card" */
 
 
 
@@ -30,14 +29,13 @@ if(AccessToken){
 }
 
 
-return    <div className="flex flex-col bg-[#1a1d21] min-h-screen">
+return    <div className="flex flex-col bg-[#121212] min-h-screen relative">
          <Navbar Name={userdata?.name} image={userdata?.Image} username={userdata?.username}></Navbar>
-        <div className="flex text-white flex-1">
+        <div className="flex text-white flex-1 absolute top-16">
          <aside className="hidden lg:basis-[25%] lg:flex lg:flex-col p-3"> 
                  <MiniProfile peoples={userdata?.followers.Arr} Name={userdata?.name} image={userdata?.Image} followercount={userdata?.followers.count} followingcount={userdata?.following.count} username={userdata?.username}></MiniProfile>
-                {/*  <Card peoples={userdata?.followers.Arr}></Card> */}
                  </aside>
-        <div className="w-full m-3 lg:basis-[50%] lg:m-0 pt-3"><Feed></Feed></div>
+        <div className="w-full px-4 lg:px-0 lg:basis-[50%] lg:m-0"><Feed></Feed></div>
          <aside className="hidden lg:basis-[25%] lg:block p-3 "><Rightdashboard></Rightdashboard></aside>
         </div> 
     </div>

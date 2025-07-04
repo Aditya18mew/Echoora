@@ -337,3 +337,13 @@ export async function getdatabyEmail(Email:string){
 } 
 
 
+export async function Search(query:string){
+      try{
+      const Arr=await User.find({"Biodetails.name":{$regex:query,$options:"i"}}).limit(6).select("Authdetails.username Biodetails.name Biodetails.Image")
+      return Arr
+      }catch(err){
+        console.log(err)
+      }
+}
+
+
