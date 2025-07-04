@@ -39,7 +39,7 @@ return <div className="feed">
             alt="profile img"
           />
           <div className="flex flex-col">
-            <div className="flex gap-2 items-center text-[#e0e0e0]">
+            <div className="flex gap-2 items-center text-[var(--primary)]">
               <h1 className="font-semibold">Aditya Parmar</h1>
               <span className="text-sm text-gray-400">@parmar332</span>
             </div>
@@ -48,7 +48,7 @@ return <div className="feed">
         </div>
         <button className="text-gray-400 hover:text-white px-2">⋯</button>
       </div>
-       <h2 className="text-lg text-white font-medium mt-4 ml-2">{post.title}</h2>
+       <h2 className="text-lg text-[var(--primary)] font-medium mt-4 ml-2">{post.title}</h2>
 
       <p className="text-gray-300 mt-2 ml-2">{post.body}</p>
 

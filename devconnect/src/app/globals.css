@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --Modern:#121212;
+  --primary:#e0e0e0;
+  --secondary:#aaaaaa;
 }
 
 @theme inline {
@@ -17,6 +20,10 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+.border-profile{
+  border:1px solid #2e2e2e;
 }
 
 .authbaselayout{
@@ -327,13 +334,16 @@ opacity: 0;
 
   .button{
   height: 40px;
-  color: white;
+  color: var(--primary);
 font-weight: 500;
   background-color: #3a3a3a;
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
+         margin-top: 16px; 
+         padding-inline: 16px; 
+         padding-block: 4px;
   }
 
   .button:hover{

@@ -106,7 +106,7 @@ export function ChatArea({user}:{user:user}){
      setNewMsg("")
   }
 
-return  <div className="flex-1 flex flex-col bg-[#171616]">
+return  <div className="flex-1 flex flex-col bg-[var(--Modern)]">
         {/* Header */}
        <div className="border-b-2 border-[#2e2e2e] p-4 text-white flex items-center">
         <Image src={user.anotheruser.profileimg || defaultuserimg} className="w-8 h-8 mr-2 rounded-full" alt="profileimg"></Image>

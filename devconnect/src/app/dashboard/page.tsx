@@ -29,7 +29,7 @@ if(AccessToken){
 }
 
 
-return    <div className="flex flex-col bg-[#121212] min-h-screen relative">
+return    <div className="flex flex-col bg-[var(--Modern)] min-h-screen relative">
          <Navbar Name={userdata?.name} image={userdata?.Image} username={userdata?.username}></Navbar>
         <div className="flex text-white flex-1 absolute top-16">
          <aside className="hidden lg:basis-[25%] lg:flex lg:flex-col p-3"> 

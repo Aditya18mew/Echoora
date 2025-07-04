@@ -64,11 +64,11 @@ useEffect(()=>{
 
 
  return  (
-  <div className="h-screen flex bg-[#171616]">
+  <div className="h-screen flex bg-[var(--Modern)]">
       <div className={`w-84 border-r-2 border-[#2e2e2e] flex-1 md:flex-none p-4 ${toggle ? "hidden":"block"} md:block`}>
         <h2 className="text-xl text-white font-semibold mb-4">Chats</h2>
         <ul className="space-y-2">
-            {chats?.map((user) => (
+            {chats?.map((user:user) => (
             <li
               key={user._id}
               className={`p-2 rounded cursor-pointer bg-gr text-white ${
