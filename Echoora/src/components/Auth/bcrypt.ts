@@ -10,6 +10,7 @@ import { randomInt } from "crypto"
 
 
 type formData={
+     Fullname:string
     Email:string,
     Password:string
 }
@@ -30,6 +31,9 @@ export async function bcryptData(formData:formData){
             username:formData.Email.slice(0,6) + randomInt(100,999).toString(),
             Password:hashPassword,
             Otp:otp
+        },
+        Biodetails:{
+           name:formData.Fullname
         }
        })
         await newUser.save()

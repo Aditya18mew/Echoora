@@ -19,7 +19,8 @@ type searchuser={
     username:string
   },
   Biodetails:{
-    name:string
+    name:string,
+    Image:string
   },
   _id:object
 } 
@@ -79,7 +80,7 @@ export function Navbar({Name,username,image}:data){
 
     return   <>
      <div className="w-full flex items-center justify-between h-16 px-6 bg-transparent text-white shadow-md relative">
-  <h1 className="hidden text-xl font-bold tracking-wide md:block">DevConnect</h1>
+  <h1 className="hidden text-xl font-bold tracking-wide md:block">Echoora</h1>
    <input
     type="text"
     placeholder={Error.isError ? Error.Errmessage : "Search..."}
@@ -103,9 +104,15 @@ export function Navbar({Name,username,image}:data){
     </div>
 </div>
  { isSearching && results.length &&  <div className="w-full md:w-148   md:p-0 flex px-3  self-start md:self-center h-auto z-10  text-white">
- <ul className="w-full bg-[#1a1d21] px-2 py-2 rounded-lg">
+ <ul className="w-full bg-[#1a1d21] flex flex-col px-2 py-2 rounded-lg">
     {results.map((user:searchuser)=>{
-      return <li key={user.Authdetails.username}>{user.Biodetails.name}</li>
+      return <>
+      {user.Authdetails.username!==username && <Link href={`/profile/${user.Authdetails.username}`} key={user.Authdetails.username}>
+      <div className="flex flex-row m-1 p-1 gap-3 items-center">
+          <Image src={user.Biodetails.Image || defaultuser} className="w-8 h-8 rounded-full" alt="profileimg"></Image>
+           <h2>{user.Biodetails.name} - <span className="font-extralight text-sm text-gray-400">{user.Authdetails.username}</span></h2>
+        </div></Link>}
+      </>
     })}
  </ul>
   </div>} 

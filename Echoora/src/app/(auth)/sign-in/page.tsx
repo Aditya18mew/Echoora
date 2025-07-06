@@ -15,7 +15,7 @@ export default async function Signin(){
 
     return <div className="signindiv basediv">
        <div className="flex flex-col mt-4 gap-1 items-center w-[350px]">
-           <h1 className="font-bold text-xl">Sign in to devConnect</h1>
+           <h1 className="font-bold text-xl">Sign in to Echoora</h1>
            <p className="font-extralight">Welcome back! Please sign to continue</p>
        </div>
        <div className="flex w-[350px] justify-evenly mt-6 p-2">

@@ -2,6 +2,7 @@ import axios from "axios"
 
 
 type formData={
+ Fullname:string,   
  Email:string,
   Password:string
 }
