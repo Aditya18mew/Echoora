@@ -159,7 +159,7 @@ export default function Profile({isOwner,user}:prop) {
   </div>
    <div className="flex flex-col lg:flex-row gap-6">
     {/* Profile Card */}
-    <div className="flex flex-col items-center border-profile rounded-2xl w-full lg:w-[400px] py-6">
+    <div className="flex flex-col items-center border-profile rounded-2xl shadow-md shadow-white/5 w-full lg:w-[400px] py-6">
       <Image
         src={info.profileimg || defaultuser}
         alt="Profile image"
@@ -181,7 +181,7 @@ export default function Profile({isOwner,user}:prop) {
     </div>
 
     {/* Bio & Details */}
-    <div className="w-full border-profile rounded-2xl p-4">
+    <div className="w-full border-profile rounded-2xl shadow-md shadow-white/5 p-4">
       <h3 className="text-lg font-semibold text-[var(--primary)] mb-4">Bio and Other Details</h3>
       {isOwner ? (
         <form onSubmit={handlesubmitBio} className="flex flex-col">
@@ -248,7 +248,7 @@ export default function Profile({isOwner,user}:prop) {
     </div>
   </div>
    <div className="mt-6">
-        <div className="border-profile rounded-2xl flex items-center gap-6">
+        <div className="border-profile rounded-2xl shadow-md shadow-white/5 flex items-center gap-6">
           {isOwner ? <> <>
     {user?.Biodetails.sociallinks.Instagram ? <Link className="mt-2 mb-2 text-[var(--primary)]" href={user.Biodetails.sociallinks.Instagram}><Image src={instagram} alt="Instagram Link"></Image></Link> : <>
       <h1 className="mt-2 mb-2 text-[var(--primary)]"  onClick={()=>setshowpopup(prev=>({...prev,Instagram:!prev.Instagram}))} >
@@ -303,7 +303,7 @@ export default function Profile({isOwner,user}:prop) {
 
 
  <div className="mt-6">
-    <div className="border-profile rounded-2xl p-4">
+    <div className="border-profile rounded-2xl shadow-md shadow-white/5 p-4">
       <h1 className="text-white text-lg mb-2">About</h1>
       {isOwner ? (
         <textarea

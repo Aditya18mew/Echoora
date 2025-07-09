@@ -17,14 +17,15 @@ export async function Signupaction(formData:formData){
    console.log(err)
     }
 }
-export async function Signinaction(formData:formData){
+export async function Signinaction({Email,Password}:{ Email:string, Password:string}){
     try{
-    const response=await axios.post("http://localhost:3000/api/sign-in",{Authdetails:formData},{withCredentials:true})
+    const response=await axios.post("http://localhost:3000/api/sign-in",{Authdetails:{Email:Email,Password:Password}},{withCredentials:true})
     return response.data
     }catch(err){
    console.log(err)
     }
 }
+
 export async function ForgetPasswordaction(Email:string){
     try{
     const response=await axios.post("http://localhost:3000/api/forgetpassword",{Email:Email})
@@ -33,14 +34,7 @@ export async function ForgetPasswordaction(Email:string){
    console.log(err)
     }
 }
-export async function Logoutaction(Email:string | undefined){
-    try{
-    const response=await axios.post("http://localhost:3000/api/logout",{Email:Email})
-    return response.data
-    }catch(err){
-   console.log(err)
-    }
-}
+
 
 export async function VerifyEmailaction(Email:string | undefined,otp:string){
      try{

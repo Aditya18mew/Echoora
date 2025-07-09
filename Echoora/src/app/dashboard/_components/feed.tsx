@@ -10,7 +10,7 @@ import Image from "next/image"
 export  default async function Feed(){
 
 return <div className="feed">
-      <div className="bg-[#121212] rounded-2xl mb-5 p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
+      <div className="bg-[#121212] rounded-2xl mb-5 p-4 border border-zinc-800 shadow-md shadow-white/5 transition-shadow duration-300">
           
            <div className="flex flex-col gap-2 justify-between items-start">
         <div className="flex gap-4 w-full items-center">
@@ -29,7 +29,7 @@ return <div className="feed">
 
       </div>
       {data.map((post)=>{
-        return  <div key={post.id} className="bg-[#121212] rounded-2xl mb-5 p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
+        return  <div key={post.id} className="bg-[#121212] border border-zinc-800 rounded-2xl mb-5 p-4 shadow-md shadow-white/5 transition-shadow duration-300">
           
            <div className="flex justify-between items-start">
         <div className="flex gap-4">

@@ -16,7 +16,13 @@ type ComparePasswordResponse=
     isError:boolean,
   Errmessage:string
 }
-} | {
+} |{
+  what:"unverified"
+  Email:{ 
+    isError:boolean,
+  Errmessage:string
+}
+} |{
   what:"PasswordError"
   Password:{ 
     isError:boolean,
@@ -37,6 +43,7 @@ export async function POST(req:Request){
           if(response.what==="Tokens"){
             const isProd=process.env.NODE_ENV==="production"
            const res=NextResponse.json({success:true})
+
            res.cookies.set(`AccessToken`,response.AccessToken,{
             httpOnly:true,
             secure:isProd,
@@ -53,7 +60,9 @@ export async function POST(req:Request){
            })
              return res
           }
-          if(response.what==="PasswordError") return NextResponse.json({success:false,Error:response})
+          
+          if(response.what==="unverified") return NextResponse.json({success:false,Error:response})
+           if(response.what==="PasswordError") return NextResponse.json({success:false,Error:response})
           if(response.what==="EmailError") return NextResponse.json({success:false,Error:response})
           if(response.what==="Error") return NextResponse.json({success:false,Error:response})
         

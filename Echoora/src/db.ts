@@ -63,9 +63,6 @@ type following={
   }
 
         
-            
-
-
         const UserSchema=new mongoose.Schema({
         Authdetails:{
         Email:String,
@@ -76,6 +73,7 @@ type following={
             trim:true,
             lowercase:true
         },
+        isVerified:{type:Boolean,default:false},
         Password:String,
         Otp:String,
         RefreshToken:String,
@@ -89,21 +87,20 @@ type following={
         },
         Biodetails:{
             name:String,
-            Image:String,
-            Experience:String,
-            Education:String,
-            Location:String,
-            WorkPlace:String,
-            About:String,
-            skills:[],
+            Image:{type:String,default:""},
+            Experience:{type:String,default:""},
+            Education:{type:String,default:""},
+            Location:{type:String,default:""},
+            WorkPlace:{type:String,default:""},
+            About:{type:String,default:""},
             sociallinks:{
-                Instagram:String,
-                Github:String,
-                Linkedin:String
+                Instagram:{type:String,default:""},
+                Github:{type:String,default:""},
+                Linkedin:{type:String,default:""}
             }
         },
         followers:{
-            count:Number,
+            count:{type:Number,default:0},
             Arr:[{
                 username:String,
                 profileimg:String,
@@ -113,7 +110,7 @@ type following={
             }]
         },
         following:{
-            count:Number,
+            count:{type:Number,default:0},
             Arr:[{
                 username:String,
                 profileimg:String,
@@ -121,7 +118,51 @@ type following={
                 name:String
             }]
         },
-        posts:[]
+        posts:[{
+         type:mongoose.Schema.Types.ObjectId,
+         ref:"Post"
+        }]
+        })
+
+        const PostSchema=new mongoose.Schema({
+          author:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"User",
+                required:true
+            },
+            content:{
+                type:String,
+                required:true,
+                trim:true
+            },
+            media:{
+                type:[String],
+                default:[]
+            },
+            likes:[{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"User"
+            }],
+            comments:[{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"User"
+            }],
+            isEdited:{
+                type:Boolean,
+                default:false
+            },
+            createdAt:{
+                type:Date,
+                default:Date.now()
+            },
+            updatedAt:Date
+        })
+
+        PostSchema.pre("save", function (next){
+           if(this.isModified()){
+          this.updatedAt=new Date()
+          next()
+           }
         })
 
          const ChatSchema=new mongoose.Schema({
@@ -146,6 +187,7 @@ type following={
  export const User=mongoose.models.User || mongoose.model("User",UserSchema)
  export const Chat=mongoose.models.Chat || mongoose.model("Chat",ChatSchema)
  export const Message=mongoose.models.Message || mongoose.model("Message",MessageSchema)
+ export const Post=mongoose.models.Post || mongoose.model("Post",PostSchema)
 
 
 export async function connectdb(){
@@ -212,7 +254,7 @@ export async function Fetchmessage(selfusername:string,username:string){
 
 export async function Getuserbyusername(username:string,curruser:string){
     try{
-        const getUser=await User.findOne({"Authdetails.username":username})/* .lean<Userlean>() */
+        const getUser=await User.findOne({"Authdetails.username":username}).select("-Authdetails.Password -Authdetails.RefreshToken")    /* .lean<Userlean>() */
         if(!getUser){
             return {success:false}
         }
@@ -229,7 +271,6 @@ export async function Getuserbyusername(username:string,curruser:string){
             Location:getUser.Biodetails.Location,
             WorkPlace:getUser.Biodetails.WorkPlace,
             About:getUser.Biodetails.About,
-            skills:getUser.Biodetails.skills,
             sociallinks:{
                 Instagram:getUser.Biodetails.sociallinks.Instagram,
                 Github:getUser.Biodetails.sociallinks.Github,
@@ -302,16 +343,9 @@ export async function getdatabyEmail(Email:string){
         }
 
         /* it is a nice work-around but will need different option way to do this */
-    const convertedfollowerarr:follower[]= getUser.followers.Arr.map((item)=>({  username:item.username,
-                profileimg:item.profileimg,
-                followedAt:item.followedAt,
-                name:item.name,
-                isFollowedBack:item.isFollowedBack}))
+    const convertedfollowerarr:follower[]= JSON.parse(JSON.stringify(getUser.followers.Arr))
    
-    const convertedfollowingarr:following[]= getUser.following.Arr.map((item)=>({  username:item.username,
-                profileimg:item.profileimg,
-                followedAt:item.followedAt,
-                name:item.name}))
+    const convertedfollowingarr:following[]= JSON.parse(JSON.stringify(getUser.following.Arr))
    
 
        const data={
@@ -339,7 +373,7 @@ export async function getdatabyEmail(Email:string){
 
 export async function Search(query:string){
       try{
-      const Arr=await User.find({"Biodetails.name":{$regex:query,$options:"i"}}).limit(6).select("Authdetails.username Biodetails.name Biodetails.Image")
+      const Arr=await User.find({"Biodetails.name":{$regex:query,$options:"i"}}).limit(8).select("Authdetails.username Biodetails.name Biodetails.Image")
       return Arr
       }catch(err){
         console.log(err)

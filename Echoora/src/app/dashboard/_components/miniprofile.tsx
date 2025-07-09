@@ -89,12 +89,12 @@ export  function MiniProfile({Name,image,username,followingcount,followercount,p
       <div className="flex flex-col bg-[#1e1e1e] border-profile p-2 rounded-2xl m-2">
         <h1 className="text-lg m-1">Who is to follow you</h1>
         <div className="flex flex-col gap-2">{list?.slice(twonumber.A,twonumber.B).map((person)=>{
-            return <div className="flex justify-evenly items-center mt-1" key={person.username}>
-                 <Image src={profile} className="w-12 h-12 rounded-full" alt="profile img"></Image>
-                <Link  href={`/profile/${person.username}`}><h1 className="text-lg">{person.name}</h1>
+            return <div className="flex justify-start gap-3 ml-2 items-center mt-1" key={person.username}>
+                 <Image src={profile} className="w-12 h-12  rounded-full" alt="profile img"></Image>
+                <Link  href={`/profile/${person.username}`}><h1 className="text-nowrap">{person.name}</h1>
                      <p className="font-extralight text-gray-300">{person.username}</p>
                 </Link>
-                <button onClick={()=>follow(person.username,person.isFollowedBack)} className="bg-white w-20 hover:opacity-80 hover:scale-x-102 active:scale-x-98 h-8 rounded-2xl text-black">{person.isFollowedBack ? "unfollow":"follow"}</button>
+                <button onClick={()=>follow(person.username,person.isFollowedBack)} className="bg-white w-20 hover:opacity-80 hover:scale-x-102 active:scale-x-98 h-8 rounded-2xl text-black">{person.isFollowedBack ? "following":"follow"}</button>
             </div>
         })}
 

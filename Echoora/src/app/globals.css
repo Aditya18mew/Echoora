@@ -23,7 +23,7 @@
 }
 
 .border-profile{
-  border:1px solid #2e2e2e;
+  border:1px solid var(--color-zinc-800);
 }
 
 .authbaselayout{

@@ -14,19 +14,11 @@ try {
     if(Toverifyuser.Authdetails.Otp===otp){
   const {AccessToken,RefreshToken}= await generatejwtToken(Email)
        Toverifyuser.Authdetails.Otp=null
-       Toverifyuser.Biodetails.name=""
-       Toverifyuser.Biodetails.Experience=""
-       Toverifyuser.Biodetails.Education=""
-       Toverifyuser.Biodetails.Location=""
-       Toverifyuser.Biodetails.WorkPlace=""
-       Toverifyuser.Biodetails.sociallinks.Instagram=""
-       Toverifyuser.Biodetails.sociallinks.Github=""
-       Toverifyuser.Biodetails.sociallinks.Linkedin=""
-       Toverifyuser.followers.count=0
-       Toverifyuser.following.count=0
+       Toverifyuser.Authdetails.isVerified=true
        await Toverifyuser.save()
        const isProd=process.env.NODE_ENV==="production"
     const response= NextResponse.json({success:true,username:Toverifyuser.Authdetails.username})
+
      response.cookies.set(`AccessToken`,AccessToken,{
             httpOnly:true,
             secure:isProd,
@@ -34,6 +26,7 @@ try {
             maxAge:60*15,
             path:"/"
            })
+
     response.cookies.set(`RefreshToken`,RefreshToken,{
       httpOnly:true,
       secure:isProd,
@@ -42,6 +35,7 @@ try {
       path:"/"
     })
     return response
+    
     }else{
      Toverifyuser.Authdetails.Otp=null
        await Toverifyuser.save()

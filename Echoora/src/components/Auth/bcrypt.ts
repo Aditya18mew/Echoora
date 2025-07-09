@@ -9,6 +9,7 @@ import { randomInt } from "crypto"
 
 
 
+
 type formData={
      Fullname:string
     Email:string,
@@ -51,6 +52,7 @@ export async function ComparePassword(formData:formData){
     try{
     const Currentuser=await FindOne(formData.Email)
     if(!Currentuser) return {what:"EmailError",Email:{isError:true,Errmessage:"no account with this email"}}
+    if(Currentuser.Authdetails.isVerified===false) return {what:"unverified",Email:{isError:true,Errmessage:"sign-up first"}}
     const passwordMatch:boolean=await bcrypt.compare(formData.Password,Currentuser.Authdetails.Password)
     if(passwordMatch){
     const {AccessToken,RefreshToken}= await generatejwtToken(formData.Email)

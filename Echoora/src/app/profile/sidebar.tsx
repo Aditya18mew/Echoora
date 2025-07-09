@@ -7,6 +7,8 @@ import logout from "@/components/icons/logout.svg"
 import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
+import axios from "axios"
+import { useRouter } from "next/navigation"
 
 
 
@@ -14,14 +16,23 @@ import { useState } from "react"
 
 
 export function Sidebar(){
+   const router=useRouter()
    const [activelink,setactivelink]=useState({
       Home:false,
       profile:true,
       setting:false
    })
 
-
-
+ async function Logoutaction(){
+    try{
+    const response=await axios.get("http://localhost:3000/api/logout",{withCredentials:true})
+      if(response.data.success){
+         router.push("/")
+      }
+    }catch(err){
+   console.log(err)
+    }
+}
  return (
     <aside className="w-18 bg-[var(--Modern)] shadow-md  flex flex-col items-center justify-between min-h-screen">
       <div className="h-40 w-12 flex flex-col gap-2 items-center mt-6">
@@ -30,8 +41,7 @@ export function Sidebar(){
          <Link className={activelink.setting ? "activesidebarlink mt-1 mb-2": "sidebarlink mt-1 mb-2"} onClick={()=>setactivelink({Home:false,profile:false,setting:true})} href="#"><Image className={activelink.setting? "w-4 h-4":"w-6 h-6"} src={setting} alt="setting"></Image></Link>
       </div>
       <div>
-         {/* later change it to button*/}
-         <Link className="w-8 h-8 mt-2 mb-1 bg-white rounded shadow flex items-center justify-center" href="/sign-in"><Image className="w-6 h-6" src={logout} alt="logout"></Image></Link>
+         <button onClick={Logoutaction} className="w-8 h-8 mt-2 mb-1 bg-white rounded shadow flex items-center justify-center"><Image className="w-6 h-6" src={logout} alt="logout"></Image></button>
       </div>
     </aside>
  )

@@ -1,7 +1,7 @@
 import { NextRequest ,NextResponse} from "next/server";
 
 export const config={
-    matcher:["/dashboard:path*","/profile:path*"]
+    matcher:["/dashboard/:path*",'/profile/:username*']
 }
 
 
@@ -10,7 +10,9 @@ export const config={
 export async function middleware(req:NextRequest){
     const AccessToken= req.cookies.get("AccessToken")?.value
     const RefreshToken=req.cookies.get("RefreshToken")?.value
-
+    if(AccessToken){
+       return NextResponse.next()
+    }
     if(!AccessToken && RefreshToken){
         const res=await fetch(`${process.env.NEXTAUTH_URL}/api/auth/refresh`,{
           headers:{
@@ -35,5 +37,5 @@ export async function middleware(req:NextRequest){
         } 
         return NextResponse.redirect(new URL("/sign-in",req.url))
     }
-    return NextResponse.next()
+    return NextResponse.redirect(new URL("/sign-in",req.url))
 }
