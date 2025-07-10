@@ -1,11 +1,10 @@
-
+import mongoose from "mongoose";
 import express from "express"
 import http from "http"
 import cors from "cors"
 import { Server } from "socket.io"
-import { Chat,Message, connectdb } from "./mongoosedb"
-import { Client } from "socket.io/dist/client"
-import { time } from "console"
+import { Chat,Message, connectdb,Deletemessage } from "./mongoosedb"
+
 
 type sendmesagedata={
     selfusername:string,
@@ -40,6 +39,10 @@ io.on("connection",async (socket)=>{
     socket.join(roomId)
   })
 
+  socket.on("delete-message",async ({deleteId}:{deleteId:string})=>{
+     await Deletemessage(deleteId)
+  })
+
   socket.on("send-message",async ({selfusername,username,sender}:sendmesagedata)=>{
      const willchat=await Chat.findOne({$and:[{"participants.username":{$all:[selfusername,username]}},{"participants":{$size:2}}]})
      const roomId=willchat._id.toString()
@@ -55,7 +58,7 @@ io.on("connection",async (socket)=>{
         time:sender.time
       }
      })
-    io.to(roomId).except(socket.id).emit("receive-message",newMessage)
+    io.to(roomId).emit("receive-message",newMessage)
   }) 
 
   socket.on("disconnect",()=>{

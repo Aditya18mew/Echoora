@@ -35,3 +35,13 @@ try{
     process.exit(1)
 }
 }
+
+export async function Deletemessage(deleteId:string){
+    const Id=new mongoose.Types.ObjectId(deleteId)
+    try{
+    await Message.findByIdAndDelete(Id)
+    }catch(err){
+       console.log(err)
+    }
+
+}

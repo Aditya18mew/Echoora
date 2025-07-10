@@ -2,7 +2,7 @@
 import google from "@/components/icons/google.svg"
 import github from "@/components/icons/github.svg"
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import "../app/globals.css"
 import { signIn} from "next-auth/react";
 
@@ -28,6 +28,14 @@ export function BacktoHomebutton(){
 
 export function Spinnerinsidebutton(){
     return <div className="spinner"></div>
+}
+
+export function BackfromChat(){
+    const router=useRouter()
+     function back(){
+        router.back()
+    }
+    return <button onClick={back}>{`<-`}</button>
 }
 
 

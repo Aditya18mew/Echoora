@@ -171,7 +171,7 @@ type following={
                 Name:String,
                 profileimg:String
             }],
-            content:String,
+            latestcontent:String,
             upDatedAt:{type:Date,default:Date.now()}
         })
 
@@ -348,19 +348,19 @@ export async function getdatabyEmail(Email:string){
     const convertedfollowingarr:following[]= JSON.parse(JSON.stringify(getUser.following.Arr))
    
 
-       const data={
-     username:getUser.Authdetails.username,
-     name:getUser.Biodetails.name,
-     Image:getUser.Biodetails.Image,
-      About:getUser.Biodetails.About,
+    const data={
+        username:getUser.Authdetails.username,
+        name:getUser.Biodetails.name,
+        Image:getUser.Biodetails.Image,
+        About:getUser.Biodetails.About,
         followers:{
-            count:getUser.followers.count,
-            Arr:convertedfollowerarr
-        },
+                    count:getUser.followers.count,
+                    Arr:convertedfollowerarr
+                  },
         following:{
-            count:getUser.following.count,
-            Arr:convertedfollowingarr
-        },
+                    count:getUser.following.count,
+                    Arr:convertedfollowingarr
+                  },
         posts:getUser.posts
     }
     return {success:true,data:data}
@@ -370,7 +370,6 @@ export async function getdatabyEmail(Email:string){
 
 } 
 
-
 export async function Search(query:string){
       try{
       const Arr=await User.find({"Biodetails.name":{$regex:query,$options:"i"}}).limit(8).select("Authdetails.username Biodetails.name Biodetails.Image")
@@ -379,5 +378,17 @@ export async function Search(query:string){
         console.log(err)
       }
 }
+
+export async function FetchPosts(){
+    try{
+        const PostArr=(await Post.find())
+        return JSON.parse(JSON.stringify(PostArr))
+    }catch(err){
+        console.log(err)
+    }
+}
+
+
+
 
 

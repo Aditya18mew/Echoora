@@ -1,7 +1,7 @@
 import { NextRequest ,NextResponse} from "next/server";
 
 export const config={
-    matcher:["/dashboard/:path*",'/profile/:username*']
+    matcher:["/","/dashboard/:path*",'/profile/:username*']
 }
 
 
@@ -10,6 +10,11 @@ export const config={
 export async function middleware(req:NextRequest){
     const AccessToken= req.cookies.get("AccessToken")?.value
     const RefreshToken=req.cookies.get("RefreshToken")?.value
+
+     if(req.nextUrl.pathname==="/" && AccessToken){
+        return NextResponse.redirect(new URL("/dashboard",req.url))
+      } 
+
     if(AccessToken){
        return NextResponse.next()
     }
@@ -33,6 +38,11 @@ export async function middleware(req:NextRequest){
             maxAge:60*15,
             path:"/"
            })
+
+           if(req.nextUrl.pathname==="/"){
+            return NextResponse.redirect(new URL("/dashboard",req.url))
+           }    
+
            return response
         } 
         return NextResponse.redirect(new URL("/sign-in",req.url))

@@ -4,6 +4,7 @@ import {useEffect, useState } from "react";
 import { ChatArea } from "./chatarea";
 import defaultuserimg from "@/components/icons/defaultuser.svg"
 import Image from "next/image";
+import { BackfromChat } from "@/components/Buttons"
  
 
 
@@ -14,9 +15,11 @@ type fetchChats={
     Name:string,
     profileimg:string
   },
+  latestcontent:string,
   upDatedAt:string,
   _id:string
 }[] | undefined
+
 
 type user={
     selfusername:string,
@@ -25,13 +28,14 @@ type user={
     Name:string,
     profileimg:string
   },
+  latestcontent:string,
   upDatedAt:string,
   _id:string
 }
 
 
 
-export function ChatSidebar({fetchChats,selfusername}:{fetchChats:fetchChats,selfusername:string}){
+export function ChatSidebar({fetchChats}:{fetchChats:fetchChats}){
 
   const [selectedUser, setSelectedUser] = useState<user>({
      selfusername:"",
@@ -40,11 +44,12 @@ export function ChatSidebar({fetchChats,selfusername}:{fetchChats:fetchChats,sel
     Name:"",
     profileimg:""
   },
+  latestcontent:"",
     upDatedAt:"",
     _id:""
   });
 
-  const [chats,setchats]=useState(fetchChats)
+  const [chats,setchats]=useState(fetchChats?.sort((a,b)=>new Date(a.upDatedAt).getSeconds()-new Date(b.upDatedAt).getSeconds()))
   const [toggle,settoggle]=useState(false)
 
  function handlechat(user:user){
@@ -66,7 +71,8 @@ useEffect(()=>{
  return  (
   <div className="h-screen flex bg-[var(--Modern)]">
       <div className={`w-84 border-r-2 border-[#2e2e2e] flex-1 md:flex-none p-4 ${toggle ? "hidden":"block"} md:block`}>
-        <h2 className="text-xl text-white font-semibold mb-4">Chats</h2>
+        <div className="flex flex-row text-white items-center gap-2"><BackfromChat></BackfromChat>
+        <h2 className="text-xl text-white font-semibold mb-4">Chats</h2></div>
         <ul className="space-y-2">
             {chats?.map((user:user) => (
             <li
@@ -76,9 +82,13 @@ useEffect(()=>{
               }`}
               onClick={()=>handlechat(user)}
             >
-              <div className="flex flex-row">
+              <div className="flex flex-row items-start">
                 <Image src={user.anotheruser.profileimg || defaultuserimg} className="w-7 h-7 mr-2 mt-2 rounded-full" alt="profileimg"></Image>
-                 <h2  className={`px-2 py-2 rounded-lg`}>{user.anotheruser.Name}</h2></div>
+                  <h2 className={`flex flex-col px-4 rounded-lg w-full`}>{user.anotheruser.Name}
+                    <p className="text-sm opacity-70 flex w-full justify-between font-extralight">
+                      <span >{user.latestcontent}</span><span>{new Date(user.upDatedAt).toTimeString().slice(0,5)}</span></p>
+                  </h2>
+                 </div>
             </li> 
           ))}
         </ul>

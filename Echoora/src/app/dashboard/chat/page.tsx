@@ -5,6 +5,7 @@ import { ChatSidebar } from "./chatSidebar";
 
 type user={
     participants:{username:string,Name:string,profileimg:string}[]
+    latestcontent:string
     upDatedAt:string
     _id:string
 }
@@ -17,13 +18,11 @@ export default async function ChatPage() {
   await connectdb()
  const cookiestore=await cookies()
  const AccessToken=cookiestore.get("AccessToken")?.value
- let selfuser;
  let fetchChats;
 
  if(AccessToken){
    const email=await VerifyAccessToken(AccessToken) 
    const {selfusername,findchats}=await FetchChat(email)
-   selfuser=selfusername
    fetchChats=findchats.map((user:user)=>{
     const anotheruser=user.participants.find((participant:participant)=>participant.username!==selfusername)
     return {
@@ -33,6 +32,7 @@ export default async function ChatPage() {
         Name:anotheruser?.Name,
         profileimg:anotheruser?.profileimg
       },
+      latestcontent:user.latestcontent,
       upDatedAt:user.upDatedAt,
       _id:user._id
     }
@@ -41,6 +41,6 @@ export default async function ChatPage() {
 
 
   return (
-    <ChatSidebar fetchChats={fetchChats} selfusername={selfuser}></ChatSidebar>
+    <ChatSidebar fetchChats={fetchChats}></ChatSidebar>
   );
 }

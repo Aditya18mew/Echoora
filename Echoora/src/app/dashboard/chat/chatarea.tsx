@@ -2,9 +2,9 @@
 import socket from "@/utils/socket"
 import axios from "axios"
 import Image from "next/image"
-import {useEffect, useRef, useState } from "react"
+import React, {Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from "react"
 import defaultuserimg from "@/components/icons/defaultuser.svg"
-import { Randomstring } from "@/utils/generaterandomstring"
+
 
 
 
@@ -35,56 +35,52 @@ type Message={
 export function ChatArea({user}:{user:user}){
   const [Messages, setMessages] = useState<Message[]>([]);
   const [newMsg, setNewMsg] = useState("");
-  const hasdone=useRef(false)
+  const hasJoined=useRef(false)
   const bottomRef=useRef<HTMLHeadingElement | null>(null)
+  const [isselected,setisselected]=useState("")
+  
 
-
-
-  function handleChange(e:React.ChangeEvent<HTMLInputElement>){
-   const {value}=e.target
-   setNewMsg(value)
-  }
-
-
-
-  useEffect(()=>{
-     async function fetchmessage(selfusername:string,username:string){
-    try{
-      const res=await axios.post("http://localhost:3000/api/dashboard/chat/message",{selfusername:selfusername,username:username})
-      if(res.data.success){
-         setMessages(res.data.Messages)
+      function handleChange(e:React.ChangeEvent<HTMLInputElement>){
+      const {value}=e.target
+      setNewMsg(value)
       }
-    }catch(err){
-      console.log(err)
-    }
-  }
-   fetchmessage(user.selfusername,user.anotheruser.username)
-  },[user.selfusername,user.anotheruser.username])
 
-  useEffect(()=>{
-   if(!hasdone.current){
-     socket.emit("join-chat",{selfusername:user.selfusername,username:user.anotheruser.username})
-   }
-   hasdone.current=true
-        socket.on("receive-message",(newMessage)=>{
-           
-      setMessages(prev=>([...prev,newMessage]))
-   })
-   return ()=>{
-    socket.off("receive-message")
-   }
-  },[user.selfusername,user.anotheruser.username])
+      useEffect(()=>{
+        async function fetchmessage(selfusername:string,username:string){
+        try{
+          const res=await axios.post("http://localhost:3000/api/dashboard/chat/message",{selfusername:selfusername,username:username})
+          if(res.data.success){
+            setMessages(res.data.Messages)
+          }
+        }catch(err){
+          console.log(err)
+        }
+      }
+        fetchmessage(user.selfusername,user.anotheruser.username)
+        },[user.selfusername,user.anotheruser.username])
 
-  useEffect(()=>{
-   bottomRef.current?.scrollIntoView({
-    behavior:"smooth"
-   })
-  },[Messages])
+        useEffect(()=>{
+        if(!hasJoined.current){
+          socket.emit("join-chat",{selfusername:user.selfusername,username:user.anotheruser.username})
+        }
+        hasJoined.current=true
+              socket.on("receive-message",(newMessage)=>{
+                setMessages(prev=>([...prev,newMessage]))
+                })
+                return ()=>{
+                  socket.off("receive-message")
+                }
+                },[user.selfusername,user.anotheruser.username])
 
- 
+  
+              useEffect(()=>{
+              bottomRef.current?.scrollIntoView({
+                behavior:"smooth"
+              })
+              },[Messages])
 
-
-  function sendmessage(){
+  
+   function sendmessage(){
     socket.emit("send-message",{
     selfusername:user.selfusername,
     username:user.anotheruser.username,
@@ -94,17 +90,9 @@ export function ChatArea({user}:{user:user}){
       time:Date.now().toLocaleString()
     }
     })
-     setMessages(prev=>[...prev,{
-      _id:Randomstring() ,
-      ChatId:"",
-      sender:{
-      username:user.selfusername,
-      message:newMsg,
-      time:Date.now().toLocaleString()
-    }
-     }])
      setNewMsg("")
   }
+
 
 return  <div className="flex-1 flex flex-col bg-[var(--Modern)]">
         {/* Header */}
@@ -117,23 +105,18 @@ return  <div className="flex-1 flex flex-col bg-[var(--Modern)]">
         </div>
 
         {/* Messages */}
-        <div className="flex-1 flex justify-center overflow-y-auto p-4 space-y-3 text-white">
+        <div onClick={()=>setisselected("")} className="flex-1 flex justify-center overflow-y-auto p-4 space-y-3 text-white">
           <div className="flex-1 overflow-y-auto p-2 space-y-3 messages">
           {Messages.map(({_id,sender}) => (
             <div key={_id}>  
               <div className="flex flex-row">
                 {sender.username!==user.selfusername && 
-                <Image src={user.anotheruser.profileimg || defaultuserimg} className="w-7 h-7 mr-2 mt-2 rounded-full" alt="profileimg"></Image>}
-
-              <h2 ref={bottomRef} className={`max-w-xs px-4 py-2 rounded-lg ${
-                sender.username === user.selfusername
-                  ? "bg-purple-500 text-white self-end ml-auto"
-                  : "bg-gray-800 text-white self-start mr-auto"
-              }`}>{sender.message}</h2></div>
-            </div>
+                <Image src={user.anotheruser.profileimg || defaultuserimg} className="w-7 h-7 mr-2 mt-2 self-start rounded-full" alt="profileimg"></Image>}
+                <ChatMessage id={_id} isselected={isselected} ref={bottomRef}  setisselected={setisselected} className={sender.username===user.selfusername}>{sender.message}</ChatMessage>
+              </div>
+              </div>
           ))}
         </div>
-
         </div>
 
         {/* Input */}
@@ -153,4 +136,60 @@ return  <div className="flex-1 flex flex-col bg-[var(--Modern)]">
           </button>
         </div> 
       </div>
+}
+
+
+
+function ChatMessage({
+  children,
+  className,
+  isselected,
+  setisselected,
+  id,
+  ref
+}:{
+  children:React.ReactNode,
+  className:boolean,
+  isselected:string,
+  setisselected:Dispatch<SetStateAction<string>>
+  id:string,
+  ref:RefObject<HTMLHeadingElement | null>
+}){
+  const [showmenu,setshowmenu]=useState(false)
+const [position,setposition]=useState({x:0,y:0})
+
+
+const handlerightclick=(e)=>{
+    e.preventDefault()
+    setisselected(id)
+  setposition({x:e.PageX,y:e.PageY})
+  setshowmenu(true)
+}
+const handleclick=()=>{
+ setshowmenu(false)
+}
+
+ function deletemessage(){
+    socket.emit("delete-message",{deleteId:id})
+    setisselected("")
+  }
+
+
+
+
+  return  <div onContextMenu={handlerightclick} onClick={handleclick} ref={ref}  className={`relative ${className ? "self-end ml-auto":"self-start mr-auto"}`}>
+              <h2 className={`max-w-xs px-4 py-2 rounded-lg ${
+                className
+                  ? "bg-violet-500 text-white self-end ml-auto"
+                  : "bg-gray-800 text-white self-start mr-auto"
+              }`}>
+                {children}
+              </h2>
+
+              {showmenu &&  id===isselected && <div className="z-50  w-40 gap-1 absolute bg-black/60 backdrop-blur-md rounded shadow-lg flex-col" style={{top:position.y,left:position.x}}>
+                {className && <button onClick={deletemessage} className="w-full text-left px-4 py-2 hover:bg-gray-700">delete</button>}
+                              <button className="w-full text-left px-4 py-2 hover:bg-gray-700">copy</button>
+                              <button className="w-full text-left px-4 py-2 hover:bg-gray-700">info</button>
+                </div>}
+          </div>
 }
