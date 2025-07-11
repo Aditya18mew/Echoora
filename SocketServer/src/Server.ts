@@ -37,10 +37,12 @@ io.on("connection",async (socket)=>{
       const willchat=await Chat.findOne({$and:[{"participants.username":{$all:[selfusername,username]}},{"participants":{$size:2}}]})
       const roomId=willchat._id.toString()
     socket.join(roomId)
+  
   })
 
-  socket.on("delete-message",async ({deleteId}:{deleteId:string})=>{
+  socket.on("delete-message",async ({roomId,deleteId}:{roomId:string,deleteId:string})=>{
      await Deletemessage(deleteId)
+     io.to(roomId).except(socket.id).emit("messageDeleted",deleteId)
   })
 
   socket.on("send-message",async ({selfusername,username,sender}:sendmesagedata)=>{
@@ -58,7 +60,7 @@ io.on("connection",async (socket)=>{
         time:sender.time
       }
      })
-    io.to(roomId).emit("receive-message",newMessage)
+    io.to(roomId).emit("receive-message",{roomId:roomId,newMessage:newMessage})
   }) 
 
   socket.on("disconnect",()=>{

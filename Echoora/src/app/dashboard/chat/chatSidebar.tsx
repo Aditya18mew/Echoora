@@ -49,7 +49,7 @@ export function ChatSidebar({fetchChats}:{fetchChats:fetchChats}){
     _id:""
   });
 
-  const [chats,setchats]=useState(fetchChats?.sort((a,b)=>new Date(a.upDatedAt).getSeconds()-new Date(b.upDatedAt).getSeconds()))
+  const [chats,setchats]=useState(fetchChats?.sort((a,b)=>new Date(b.upDatedAt).getTime()-new Date(a.upDatedAt).getTime()))
   const [toggle,settoggle]=useState(false)
 
  function handlechat(user:user){
@@ -64,7 +64,6 @@ useEffect(()=>{
   socket.disconnect()
  }
 },[])
-
 
 
 

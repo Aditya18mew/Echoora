@@ -2,8 +2,9 @@
 import socket from "@/utils/socket"
 import axios from "axios"
 import Image from "next/image"
-import React, {Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from "react"
+import React, {useEffect, useRef, useState } from "react"
 import defaultuserimg from "@/components/icons/defaultuser.svg"
+
 
 
 
@@ -38,49 +39,29 @@ export function ChatArea({user}:{user:user}){
   const hasJoined=useRef(false)
   const bottomRef=useRef<HTMLHeadingElement | null>(null)
   const [isselected,setisselected]=useState("")
-  
+  const [roomId,setroomId]=useState("")
+  const [showmenu,setshowmenu]=useState(false)
+  const [position,setposition]=useState({x:0,y:0})
+
+
+
+      const handlerightclick=(e,id:string)=>{
+          e.preventDefault()
+          setisselected(id)
+          setposition({x:e.PageX,y:e.PageY})
+          setshowmenu(true)
+      }
 
       function handleChange(e:React.ChangeEvent<HTMLInputElement>){
-      const {value}=e.target
-      setNewMsg(value)
+          const {value}=e.target
+          setNewMsg(value)
       }
 
-      useEffect(()=>{
-        async function fetchmessage(selfusername:string,username:string){
-        try{
-          const res=await axios.post("http://localhost:3000/api/dashboard/chat/message",{selfusername:selfusername,username:username})
-          if(res.data.success){
-            setMessages(res.data.Messages)
-          }
-        }catch(err){
-          console.log(err)
-        }
+      const handleclick=()=>{
+          setshowmenu(false)
       }
-        fetchmessage(user.selfusername,user.anotheruser.username)
-        },[user.selfusername,user.anotheruser.username])
 
-        useEffect(()=>{
-        if(!hasJoined.current){
-          socket.emit("join-chat",{selfusername:user.selfusername,username:user.anotheruser.username})
-        }
-        hasJoined.current=true
-              socket.on("receive-message",(newMessage)=>{
-                setMessages(prev=>([...prev,newMessage]))
-                })
-                return ()=>{
-                  socket.off("receive-message")
-                }
-                },[user.selfusername,user.anotheruser.username])
-
-  
-              useEffect(()=>{
-              bottomRef.current?.scrollIntoView({
-                behavior:"smooth"
-              })
-              },[Messages])
-
-  
-   function sendmessage(){
+       function sendmessage(){
     socket.emit("send-message",{
     selfusername:user.selfusername,
     username:user.anotheruser.username,
@@ -93,6 +74,65 @@ export function ChatArea({user}:{user:user}){
      setNewMsg("")
   }
 
+
+      function deletemessage(){
+          socket.emit("delete-message",{roomId:roomId,deleteId:isselected})
+          setMessages(Messages.filter(({_id})=>_id!==isselected))
+          setisselected("")
+      }
+  
+   
+
+  useEffect(()=>{
+      async function fetchmessage(selfusername:string,username:string){
+        try{
+          const res=await axios.post("http://localhost:3000/api/dashboard/chat/message",{selfusername:selfusername,username:username})
+          if(res.data.success){
+            setMessages(res.data.Messages)
+          }
+        }catch(err){
+          console.log(err)
+        }
+      }
+        fetchmessage(user.selfusername,user.anotheruser.username)
+        },[user.selfusername,user.anotheruser.username])
+
+   useEffect(()=>{
+        if(!hasJoined.current){
+          socket.emit("join-chat",{selfusername:user.selfusername,username:user.anotheruser.username})
+        }
+        hasJoined.current=true
+
+        socket.on("receive-message",({roomId,newMessage})=>{
+            setroomId(roomId)
+            setMessages(prev=>([...prev,newMessage]))
+        })
+
+        return ()=>{
+             socket.off("receive-message")
+          }
+        },[user.selfusername,user.anotheruser.username])
+
+  
+        useEffect(()=>{
+             bottomRef.current?.scrollIntoView({
+                behavior:"smooth"
+          })
+        },[Messages])
+
+
+        useEffect(()=>{
+             socket.on("messageDeleted",(deleteId)=>{
+                  setMessages(Messages.filter(({_id})=>_id!==deleteId))
+             })
+
+        return ()=>{
+                  socket.off("messageDeleted")
+             }
+        },[Messages])
+
+  
+  
 
 return  <div className="flex-1 flex flex-col bg-[var(--Modern)]">
         {/* Header */}
@@ -112,7 +152,22 @@ return  <div className="flex-1 flex flex-col bg-[var(--Modern)]">
               <div className="flex flex-row">
                 {sender.username!==user.selfusername && 
                 <Image src={user.anotheruser.profileimg || defaultuserimg} className="w-7 h-7 mr-2 mt-2 self-start rounded-full" alt="profileimg"></Image>}
-                <ChatMessage id={_id} isselected={isselected} ref={bottomRef}  setisselected={setisselected} className={sender.username===user.selfusername}>{sender.message}</ChatMessage>
+                
+                <div onContextMenu={(e)=>{handlerightclick(e,_id)}} onClick={handleclick} ref={bottomRef}  className={`relative ${sender.username===user.selfusername ? "self-end ml-auto":"self-start mr-auto"}`}>
+              <h2 className={`max-w-xs px-4 py-2 rounded-lg ${
+                sender.username===user.selfusername
+                  ? "bg-violet-500 text-white self-end ml-auto"
+                  : "bg-gray-800 text-white self-start mr-auto"
+              }`}>
+                {sender.message}
+              </h2>
+
+              {showmenu &&  _id===isselected && <div className="z-50  w-40 gap-1 absolute bg-black/60 backdrop-blur-md rounded-2xl shadow-lg flex-col" style={{bottom:position.y,left:position.x}}>
+                {sender.username===user.selfusername && <button onClick={deletemessage} className="w-full text-left rounded-t-2xl px-4 py-2 hover:bg-gray-700">delete</button>}
+                              <button className="w-full text-left px-4 py-2 hover:bg-gray-700">copy</button>
+                              <button className="w-full text-left px-4 py-2 rounded-b-2xl hover:bg-gray-700">info</button>
+               </div>}
+               </div> 
               </div>
               </div>
           ))}
@@ -140,56 +195,3 @@ return  <div className="flex-1 flex flex-col bg-[var(--Modern)]">
 
 
 
-function ChatMessage({
-  children,
-  className,
-  isselected,
-  setisselected,
-  id,
-  ref
-}:{
-  children:React.ReactNode,
-  className:boolean,
-  isselected:string,
-  setisselected:Dispatch<SetStateAction<string>>
-  id:string,
-  ref:RefObject<HTMLHeadingElement | null>
-}){
-  const [showmenu,setshowmenu]=useState(false)
-const [position,setposition]=useState({x:0,y:0})
-
-
-const handlerightclick=(e)=>{
-    e.preventDefault()
-    setisselected(id)
-  setposition({x:e.PageX,y:e.PageY})
-  setshowmenu(true)
-}
-const handleclick=()=>{
- setshowmenu(false)
-}
-
- function deletemessage(){
-    socket.emit("delete-message",{deleteId:id})
-    setisselected("")
-  }
-
-
-
-
-  return  <div onContextMenu={handlerightclick} onClick={handleclick} ref={ref}  className={`relative ${className ? "self-end ml-auto":"self-start mr-auto"}`}>
-              <h2 className={`max-w-xs px-4 py-2 rounded-lg ${
-                className
-                  ? "bg-violet-500 text-white self-end ml-auto"
-                  : "bg-gray-800 text-white self-start mr-auto"
-              }`}>
-                {children}
-              </h2>
-
-              {showmenu &&  id===isselected && <div className="z-50  w-40 gap-1 absolute bg-black/60 backdrop-blur-md rounded shadow-lg flex-col" style={{top:position.y,left:position.x}}>
-                {className && <button onClick={deletemessage} className="w-full text-left px-4 py-2 hover:bg-gray-700">delete</button>}
-                              <button className="w-full text-left px-4 py-2 hover:bg-gray-700">copy</button>
-                              <button className="w-full text-left px-4 py-2 hover:bg-gray-700">info</button>
-                </div>}
-          </div>
-}
