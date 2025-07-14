@@ -7,12 +7,10 @@ import { Chat,Message, connectdb,Deletemessage } from "./mongoosedb"
 
 
 type sendmesagedata={
-    selfusername:string,
-    username:string,
+    roomId:string,
     sender:{
       username:string,
-      message:string,
-      time:string
+      message:string
     }
 }
 
@@ -33,11 +31,8 @@ io.on("connection",async (socket)=>{
     console.log("User connected")
 
 
-  socket.on("join-chat",async ({selfusername,username}:{selfusername:string,username:string})=>{
-      const willchat=await Chat.findOne({$and:[{"participants.username":{$all:[selfusername,username]}},{"participants":{$size:2}}]})
-      const roomId=willchat._id.toString()
+  socket.on("join-chat",async ({roomId}:{roomId:string})=>{
     socket.join(roomId)
-  
   })
 
   socket.on("delete-message",async ({roomId,deleteId}:{roomId:string,deleteId:string})=>{
@@ -45,9 +40,9 @@ io.on("connection",async (socket)=>{
      io.to(roomId).except(socket.id).emit("messageDeleted",deleteId)
   })
 
-  socket.on("send-message",async ({selfusername,username,sender}:sendmesagedata)=>{
-     const willchat=await Chat.findOne({$and:[{"participants.username":{$all:[selfusername,username]}},{"participants":{$size:2}}]})
-     const roomId=willchat._id.toString()
+  socket.on("send-message",async ({roomId,sender}:sendmesagedata)=>{
+    const Id=new mongoose.Types.ObjectId(roomId)
+     const willchat=await Chat.findById(Id)
      willchat.latestcontent=sender.message
      willchat.upDatedAt=Date.now()
      await willchat.save()
@@ -57,10 +52,11 @@ io.on("connection",async (socket)=>{
       sender:{
         username:sender.username,
         message:sender.message,
-        time:sender.time
+        createdAt:Date.now()
       }
      })
-    io.to(roomId).emit("receive-message",{roomId:roomId,newMessage:newMessage})
+    io.to(roomId).emit("receive-message",{newMessage:newMessage})
+    io.to(roomId).emit("newmessage",newMessage)
   }) 
 
   socket.on("disconnect",()=>{

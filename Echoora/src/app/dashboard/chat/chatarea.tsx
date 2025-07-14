@@ -36,10 +36,10 @@ type Message={
 export function ChatArea({user}:{user:user}){
   const [Messages, setMessages] = useState<Message[]>([]);
   const [newMsg, setNewMsg] = useState("");
-  const hasJoined=useRef(false)
+ /*  const hasJoined=useRef(false) */
   const bottomRef=useRef<HTMLHeadingElement | null>(null)
   const [isselected,setisselected]=useState("")
-  const [roomId,setroomId]=useState("")
+  const [roomId,setroomId]=useState(user._id)
   const [showmenu,setshowmenu]=useState(false)
   const [position,setposition]=useState({x:0,y:0})
 
@@ -63,12 +63,10 @@ export function ChatArea({user}:{user:user}){
 
        function sendmessage(){
     socket.emit("send-message",{
-    selfusername:user.selfusername,
-    username:user.anotheruser.username,
-    sender:{
+    roomId:roomId,
+        sender:{
       username:user.selfusername,
       message:newMsg,
-      time:Date.now().toLocaleString()
     }
     })
      setNewMsg("")
@@ -97,34 +95,32 @@ export function ChatArea({user}:{user:user}){
         fetchmessage(user.selfusername,user.anotheruser.username)
         },[user.selfusername,user.anotheruser.username])
 
-   useEffect(()=>{
-        if(!hasJoined.current){
-          socket.emit("join-chat",{selfusername:user.selfusername,username:user.anotheruser.username})
-        }
-        hasJoined.current=true
 
-        socket.on("receive-message",({roomId,newMessage})=>{
-            setroomId(roomId)
-            setMessages(prev=>([...prev,newMessage]))
+   useEffect(()=>{
+        socket.emit("join-chat",{roomId:user._id})
+               setroomId(user._id)
+
+        socket.on("receive-message",({newMessage})=>{
+               setMessages(prev=>([...prev,newMessage]))
         })
 
         return ()=>{
-             socket.off("receive-message")
+               socket.off("receive-message")
           }
-        },[user.selfusername,user.anotheruser.username])
+        },[user._id])
 
   
-        useEffect(()=>{
-             bottomRef.current?.scrollIntoView({
+   useEffect(()=>{
+        bottomRef.current?.scrollIntoView({
                 behavior:"smooth"
           })
         },[Messages])
 
 
-        useEffect(()=>{
-             socket.on("messageDeleted",(deleteId)=>{
-                  setMessages(Messages.filter(({_id})=>_id!==deleteId))
-             })
+   useEffect(()=>{
+        socket.on("messageDeleted",(deleteId)=>{
+               setMessages(Messages.filter(({_id})=>_id!==deleteId))
+          })
 
         return ()=>{
                   socket.off("messageDeleted")

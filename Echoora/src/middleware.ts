@@ -39,6 +39,16 @@ export async function middleware(req:NextRequest){
             path:"/"
            })
 
+           if(data.RefreshToken){
+               response.cookies.set(`RefreshToken`,data.RefreshToken,{
+            httpOnly:true,
+            secure:isProd,
+            sameSite:"strict",
+            maxAge:60*60*24*7,
+            path:"/"
+           }) 
+           }
+
            if(req.nextUrl.pathname==="/"){
             return NextResponse.redirect(new URL("/dashboard",req.url))
            }    

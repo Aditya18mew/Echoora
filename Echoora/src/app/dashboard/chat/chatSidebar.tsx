@@ -48,7 +48,7 @@ export function ChatSidebar({fetchChats}:{fetchChats:fetchChats}){
     upDatedAt:"",
     _id:""
   });
-
+   
   const [chats,setchats]=useState(fetchChats?.sort((a,b)=>new Date(b.upDatedAt).getTime()-new Date(a.upDatedAt).getTime()))
   const [toggle,settoggle]=useState(false)
 
@@ -66,6 +66,15 @@ useEffect(()=>{
 },[])
 
 
+useEffect(()=>{
+  socket.on("newmessage",(newMessage)=>{
+      setchats(chats?.map((chat)=>chat._id===newMessage.ChatId ?  {...chat, latestcontent:newMessage.sender.message,upDatedAt:newMessage.sender.createdAt
+}:chat))
+        })
+        return ()=>{
+             socket.off("newmessage")
+          }
+})
 
  return  (
   <div className="h-screen flex bg-[var(--Modern)]">

@@ -112,8 +112,8 @@ export async function VerifyRefreshToken(RefreshToken:string){
     throw new Error("Refresh token must be defined")
   }
 
-    const {Email}=jwt.verify(RefreshToken,REFRESH_TOKEN_SECRET)
-    return Email
+    const {Email,exp}=jwt.verify(RefreshToken,REFRESH_TOKEN_SECRET)
+    return {Email,exp}
     }catch(err){
       console.log(err)
     }

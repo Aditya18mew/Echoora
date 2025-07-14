@@ -1,7 +1,7 @@
 
 import { GetjwtTokens } from "@/components/Auth/jwttokens";
 import { validatemail } from "@/components/regex";
-import { connectdb, CreateUser, FindOne,} from "@/db";
+import { connectdb,CreateUser ,FindOne,} from "@/db";
 import { NextResponse } from "next/server";
 
 
