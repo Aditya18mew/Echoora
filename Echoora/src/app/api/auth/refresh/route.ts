@@ -51,7 +51,8 @@ export  async function GET(req:NextRequest){
       const response=NextResponse.json({success:true,AccessToken:AccessToken,RefreshToken:newRefreshToken})
       return response   
      }else{
-       const response=NextResponse.json({success:true,AccessToken:AccessToken})        return response
+       const response=NextResponse.json({success:true,AccessToken:AccessToken})       
+        return response
      }
       
    }catch(err){

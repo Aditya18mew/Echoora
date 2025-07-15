@@ -44,7 +44,6 @@ type following={
             Location:string,
             WorkPlace:string,
             About:string,
-            skills:[],
             sociallinks:{
                 Instagram:string,
                 Github:string,

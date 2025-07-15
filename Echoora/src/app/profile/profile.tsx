@@ -25,8 +25,7 @@ type prop={
       Education:string,
       Location:string,
       WorkPlace:string,
-      About:string
-      skills:[],
+      About:string,
       sociallinks:{
         Instagram:string,
         Github:string,
@@ -62,7 +61,6 @@ export default function Profile({isOwner,user}:prop) {
     Education:user?.Biodetails.Education,
     WorkPlace:user?.Biodetails.WorkPlace,
     About:user?.Biodetails.About,
-    skills:user?.Biodetails.skills,
     Instagram:user?.Biodetails.sociallinks.Instagram,
     Github:user?.Biodetails.sociallinks.Github,
     Linkedin:user?.Biodetails.sociallinks.Linkedin,
@@ -89,26 +87,8 @@ export default function Profile({isOwner,user}:prop) {
       console.log(err)
     }
    }
-   async function handlesubmitBio(e:React.FormEvent<HTMLFormElement>){
-    e.preventDefault()
-    try{
-     const res=await UpdateBioinfo({
-      Email:info.Email,
-      Name:info.Name,
-      Education:info.Education,
-      Experience:info.Experience,
-      Location:info.Location,
-      WorkPlace:info.WorkPlace,
-      About:info.About,
-      skills:info.skills
-    })
-   if(res) {
-    /*  */
-   }
-    }catch(err){
-      console.log(err)
-    }
-   }
+   
+  
 
    async function follow(){
     try{
@@ -183,41 +163,6 @@ export default function Profile({isOwner,user}:prop) {
     {/* Bio & Details */}
     <div className="w-full border-profile rounded-2xl shadow-md shadow-white/5 p-4">
       <h3 className="text-lg font-semibold text-[var(--primary)] mb-4">Bio and Other Details</h3>
-      {isOwner ? (
-        <form onSubmit={handlesubmitBio} className="flex flex-col">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                <p className="text-[#888]">Name</p>
-                <input type="text" className="profileforminput" value={info.Name} name="Name" onChange={handlechange} />
-              </div>
-              <div>
-                <p className="text-[#888]">Email</p>
-                <p className="text-[var(--primary)]">{info.Email}</p>
-              </div>
-              <div>
-                <p className="text-[#888]">location</p>
-                <input type="text" className="profileforminput" value={info.Location} name="Location" onChange={handlechange} />
-              </div>
-              <div>
-                <p className="text-[#888]">Education</p>
-                <input type="text" className="profileforminput" value={info.Education} onChange={handlechange} name="Education" />
-              </div>
-              <div>
-                <p className="text-[#888]">Experience</p>
-                <input type="text" className="profileforminput" value={info.Experience} name="Experience" onChange={handlechange} />
-              </div>
-              <div>
-                <p className="text-[#888]">WorkPlace</p>
-                <input type="text" className="profileforminput" value={info.WorkPlace} onChange={handlechange} name="WorkPlace" />
-              </div>
-          </div>
-              
-            <button type="submit" className="button w-24 mt-4 ml-auto">
-            Save
-          </button>
-
-        </form>
-      ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {info.Name && (
             <div>
@@ -244,7 +189,6 @@ export default function Profile({isOwner,user}:prop) {
             </div>
           )}
         </div>
-      )}
     </div>
   </div>
    <div className="mt-6">
@@ -305,16 +249,7 @@ export default function Profile({isOwner,user}:prop) {
  <div className="mt-6">
     <div className="border-profile rounded-2xl shadow-md shadow-white/5 p-4">
       <h1 className="text-white text-lg mb-2">About</h1>
-      {isOwner ? (
-        <textarea
-          className="Abouttextarea w-full min-h-[200px]"
-          value={info.About}
-          onChange={handlechange}
-          name="About"
-        />
-      ) : (
-        <p className="text-[var(--primary)]">{info.About}</p>
-      )}
+      <p className="text-[var(--primary)]">{info.About}</p>
     </div>
     </div>
 </div>

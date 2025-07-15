@@ -106,13 +106,13 @@ export function Navbar({Name,username,image}:data){
  { isSearching && results.length &&  <div className="w-full md:w-148   md:p-0 flex px-3  self-start md:self-center h-auto z-10  text-white">
  <ul className="w-full bg-[#1a1d21] flex flex-col px-2 py-2 rounded-lg">
     {results.map((user:searchuser)=>{
-      return <>
+      return <div key={user.Authdetails.username}>
       {user.Authdetails.username!==username && <Link href={`/profile/${user.Authdetails.username}`} key={user.Authdetails.username}>
       <div className="flex flex-row m-1 p-1 gap-3 items-center">
           <Image src={user.Biodetails.Image || defaultuser} className="w-8 h-8 rounded-full" alt="profileimg"></Image>
            <h2>{user.Biodetails.name} - <span className="font-extralight text-sm text-gray-400">{user.Authdetails.username}</span></h2>
         </div></Link>}
-      </>
+      </div>
     })}
  </ul>
   </div>} 
