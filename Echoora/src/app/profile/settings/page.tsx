@@ -3,7 +3,10 @@ import back from "@/components/icons/back.png"
 import axios from "axios"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
+import setting from "@/components/icons/settings.svg"
+import Link from "next/link"
+
 
 type info={
     profileimg:string,
@@ -19,11 +22,25 @@ type info={
         Linkedin:string,
 }
 
+type passwords={
+  oldpassword:string,
+  newpassword:string,
+  confirmnewpassword:string
+}
+
 
 
 export default function Settings(){
    const router=useRouter()
     const [selectedTab,setselectedTab]=useState("Profile")
+    const [showchangepassword,setshowchangepassword]=useState(false)
+    const [passwords,setpasswords]=useState<passwords>({
+       oldpassword:"",
+       newpassword:"",
+       confirmnewpassword:""
+    })
+
+  
 
     const [info,setinfo]=useState<info>({
         profileimg:"",
@@ -38,6 +55,12 @@ export default function Settings(){
         Github:"",
         Linkedin:"",
        })
+
+         const handlechangeinpassword=(e:React.ChangeEvent<HTMLInputElement>)=>{
+         const {name,value}=e.target
+         setpasswords(prev=>({...prev,[name]:value}))
+         console.log(passwords)
+    }
 
     async function fetchuserinfo(){
         try{
@@ -54,6 +77,18 @@ export default function Settings(){
         fetchuserinfo()
     },[])
 
+    async function deleteaccount(){
+      try{
+       const res=await axios.get("http://localhost:3000/api/delete",{withCredentials:true})
+       if(res.data.success){
+        router.push("/")
+       }
+      }catch(err){
+        console.log(err)
+      }
+    }
+
+     
 
     function handlechange(e:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>){
         const {name,value}=e.target
@@ -87,7 +122,8 @@ export default function Settings(){
     <aside className="w-32 md:w-64 bg-[var(--Modern)] shadow-md  flex flex-col p-3 min-h-screen">
         <div className="flex gap-3 items-center">
             <button onClick={()=>router.back()}><Image className="w-6 h-6" src={back} alt="back"></Image></button>
-            <h1 className="text-white text-2xl">Settings</h1>
+            <h1 className="text-white hidden md:block text-2xl">Settings</h1>
+            <div className="w-8 h-8 bg-white rounded-sm flex items-center justify-center md:hidden mt-1 mb-2"><Image className="w-6 h-6 " src={setting} alt="setting"></Image></div>
         </div>
       <div className="flex flex-col gap-1 ml-3 mt-6">
         <h1 onClick={()=>setselectedTab("Profile")} className={selectedTab==="Profile"? "text-white flex p-1 rounded-lg  items-center h-10 bg-gray-700":"text-white flex p-1 rounded-lg  items-center h-10 hover:bg-zinc-800"}>Profile</h1>
@@ -135,6 +171,25 @@ export default function Settings(){
          <button type="button" onClick={handlesubmitBio} className="button w-24 mt-4 ml-auto">
             Save
           </button></div>}
+        {selectedTab==="Account" && <div className="space-y-6 max-w-xl">
+          <h2 className="text-2xl font-bold text-white">Account access</h2>
+             <div className="flex flex-col items-start md:items-center md:flex-row gap-2">
+                <p className="text-white text-sm md:text-lg">Email:</p>
+                <p className="text-[#888] text-sm md:text-lg">{info.Email}</p>
+              </div>
+              <div role="button" onClick={()=>setshowchangepassword(!showchangepassword)} className="text-white hover:opacity-90 cursor-pointer">Change Password {`>`}</div>
+                 {showchangepassword && <form className="flex flex-col">
+                  <label className="mb-1 text-white">old password</label>
+                  <input type="text" value={passwords.oldpassword} onChange={handlechangeinpassword} name="oldpassword" className="profileforminput md:w-[300px]" />
+                  <label className="mb-1 text-white">new password</label>
+                  <input type="text" value={passwords.newpassword} onChange={handlechangeinpassword} name="newpassword" className="profileforminput md:w-[300px]" />
+                  <label className="mb-1 text-white">confirm new password</label>
+                  <input type="text" value={passwords.confirmnewpassword} onChange={handlechangeinpassword} name="confirmnewpassword" className="profileforminput md:w-[300px]" />
+                  <Link className="text-blue-600 hover:text-[#5747e3] hover:scale-y-105 active:scale-y-95" href="/forgetpassword">Forget password?</Link>
+                   <button className="button w-24 mt-4">submit</button>
+                 </form>}
+              <button className="text-red-500">Delete Account</button>
+          </div>}  
  </div>
     </div>
 }

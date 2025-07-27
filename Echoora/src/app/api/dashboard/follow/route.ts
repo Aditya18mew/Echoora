@@ -1,5 +1,5 @@
 
-import { VerifyAccessToken } from "@/components/Auth/jwttokens";
+import { VerifyAccessToken } from "@/libs/jwttokens";
 import { connectdb, Followuser, unFollowuser } from "@/db";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -15,10 +15,10 @@ const AccessToken=cookiestore.get("AccessToken")?.value || ""
  const email=await VerifyAccessToken(AccessToken)
 
  if(isFollowed){
-    const res=  await unFollowuser(username,email)
+    await unFollowuser(username,email)
    return NextResponse.json({success:true,task:"unfollowed"})
   } else{
-    const res= await Followuser(username,email)
+    await Followuser(username,email)
     return NextResponse.json({success:true,task:"followed"})
   }
  

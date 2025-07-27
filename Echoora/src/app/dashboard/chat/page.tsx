@@ -1,5 +1,5 @@
 import { cookies } from "next/headers"
-import { VerifyAccessToken } from "@/components/Auth/jwttokens";
+import { VerifyAccessToken } from "@/libs/jwttokens";
 import { connectdb, FetchChat } from "@/db";
 import { ChatSidebar } from "./chatSidebar";
 

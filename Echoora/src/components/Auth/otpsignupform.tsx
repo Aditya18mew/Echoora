@@ -1,9 +1,9 @@
 "use client"
 
 import React, { useState } from "react"
-import { validateotp } from "../regex"
+import { validateotp } from "../../utils/regex"
 import { useRouter } from "next/navigation"
-import { VerifyEmailaction } from "@/components/Serveraction"
+import { VerifyEmailaction } from "@/libs/Serveraction"
 import { Spinnerinsidebutton } from "../Buttons"
 
 

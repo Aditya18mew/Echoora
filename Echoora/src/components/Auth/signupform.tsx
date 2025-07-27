@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
-import { Signupaction } from "../Serveraction"
-import { validatemail,validatepassword } from "../regex"
+import { Signupaction } from "../../libs/Serveraction"
+import { validatemail,validatepassword } from "../../utils/regex"
 import { useRouter } from "next/navigation"
 import { Spinnerinsidebutton } from "../Buttons"
 

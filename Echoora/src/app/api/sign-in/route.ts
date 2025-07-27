@@ -1,9 +1,8 @@
 
-
-import { ComparePassword } from "@/components/Auth/bcrypt";
-import { validatemail,validatepassword } from "@/components/regex";
+import { validatemail,validatepassword } from "@/utils/regex";
 import { connectdb } from "@/db";
 import { NextResponse } from "next/server";
+import { ComparePassword } from "@/libs/bcrypt";
 
 type ComparePasswordResponse=
 {  

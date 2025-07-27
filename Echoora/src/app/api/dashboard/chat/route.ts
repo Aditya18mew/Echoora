@@ -1,4 +1,4 @@
-import { VerifyAccessToken } from "@/components/Auth/jwttokens";
+import { VerifyAccessToken } from "@/libs/jwttokens";
 import { connectdb, StartChat } from "@/db";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";

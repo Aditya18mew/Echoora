@@ -2,7 +2,7 @@ import { cookies } from "next/headers"
 import "../../globals.css"
 import Profile from "../profile"
 import { Sidebar } from "../sidebar"
-import { VerifyToken } from "@/components/Auth/jwttokens"
+import { VerifyToken } from "@/libs/jwttokens"
 import { redirect } from "next/navigation"
 import { Getuserbyusername } from "@/db"
 

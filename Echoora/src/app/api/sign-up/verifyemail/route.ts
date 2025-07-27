@@ -1,4 +1,4 @@
-import { generatejwtToken } from "@/components/Auth/jwttokens"
+import { generatejwtToken } from "@/libs/jwttokens"
 import { connectdb, FindOne } from "@/db"
 import { NextResponse } from "next/server"
 

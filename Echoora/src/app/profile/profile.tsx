@@ -6,7 +6,7 @@ import github from "@/components/icons/github2.svg"
 import instagram from "@/components/icons/instagram.svg"
 import linkedin from "@/components/icons/linkedin.svg"
 import defaultuser from "@/components/icons/defaultuser.svg"
-import { UpdateBioinfo, UpdateSocialLinks } from "@/components/Serveraction";
+import { UpdateBioinfo, UpdateSocialLinks } from "@/libs/Serveraction";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 

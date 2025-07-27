@@ -387,6 +387,16 @@ export async function FetchPosts(){
     }
 }
 
+export async function deleteaccount(Email:string){
+    try{
+      await User.deleteOne({"Authdetails.Email":Email})
+      return true
+    }catch(err){
+        console.log(err)
+        return false
+    }
+}
+
 
 
 

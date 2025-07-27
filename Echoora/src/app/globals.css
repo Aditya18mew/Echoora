@@ -133,11 +133,11 @@ font-weight: 500;
 }
 
 .formlink:hover{
-  color: rgb(87, 71, 227);
+  color: #5747e3;
  transform: scale(1.01);
 }
 .formlink:active{
-  color: rgb(87, 71, 227);
+  color: #5747e3;
  transform: scale(0.99);
 }
 

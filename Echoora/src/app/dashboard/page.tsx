@@ -2,7 +2,7 @@ import { cookies } from "next/headers"
 import Feed from "./_components/feed"
 import { Navbar } from "./_components/navbar"
 import { Rightdashboard } from "./_components/Right"
-import { Getdata } from "@/components/Auth/jwttokens"
+import { Getdata } from "@/libs/jwttokens"
 import { notFound } from "next/navigation"
 import { MiniProfile } from "./_components/miniprofile"
 

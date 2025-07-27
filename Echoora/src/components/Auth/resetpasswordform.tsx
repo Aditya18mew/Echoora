@@ -1,8 +1,8 @@
 "use client"
 
 import React, { useState } from "react"
-import { validatepassword } from "../regex"
-import { ResetPasswordaction } from "../Serveraction"
+import { validatepassword } from "../../utils/regex"
+import { ResetPasswordaction } from "../../libs/Serveraction"
 import { useRouter } from "next/navigation"
 import { Spinnerinsidebutton } from "../Buttons"
 

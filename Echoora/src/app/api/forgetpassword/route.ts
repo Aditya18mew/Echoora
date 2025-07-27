@@ -1,5 +1,5 @@
-import { ForgetpasswordMailotp} from "@/components/Auth/nodemailer";
-import { validatemail } from "@/components/regex";
+import { ForgetpasswordMailotp} from "@/libs/nodemailer";
+import { validatemail } from "@/utils/regex";
 import { FindOne ,connectdb} from "@/db";
 import { randomInt } from "crypto";
 import { NextResponse } from "next/server";

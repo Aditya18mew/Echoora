@@ -1,4 +1,4 @@
-import { VerifyRefreshToken } from "@/components/Auth/jwttokens";
+import { VerifyRefreshToken } from "@/libs/jwttokens";
 import { connectdb, FindOne } from "@/db";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken"

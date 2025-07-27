@@ -1,8 +1,10 @@
 import { FindOne, User } from "@/db"
 import bcrypt from "bcrypt"
-import { generatejwtToken } from "./jwttokens"
+
 import { SignupMailotp } from "./nodemailer"
 import { randomInt } from "crypto"
+import { generatejwtToken } from "./jwttokens"
+
 
 
 

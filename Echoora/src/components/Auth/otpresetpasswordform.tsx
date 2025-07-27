@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { validateotp } from "../regex"
+import { validateotp } from "../../utils/regex"
 import { useRouter } from "next/navigation"
-import { VerifyforResetaction } from "../Serveraction"
+import { VerifyforResetaction } from "../../libs/Serveraction"
 import { Spinnerinsidebutton } from "../Buttons"
 
 
